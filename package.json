@@ -1,0 +1,37 @@
+{
+  "name": "tech-heads-talk",
+  "version": "1.0.0",
+  "description": "Talk for tech head conferance",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "webpack",
+    "start": "webpack-dev-server --hot"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "spectacle": "^9.4.0",
+    "prop-types": "^15.7.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
+  },
+  "devDependencies": {
+    "spectacle-cli": "^0.6.5",
+    "@babel/core": "^7.12.8",
+    "@babel/preset-react": "^7.12.7",
+    "@babel/preset-typescript": "^7.16.0",
+    "@mdx-js/react": "^1.6.22",
+    "babel-loader": "^8.0.6",
+    "file-loader": "^5.0.2",
+    "html-webpack-plugin": "^3.2.0",
+    "prompts": "^2.4.0",
+    "raw-loader": "^4.0.0",
+    "spectacle-mdx-loader": "^0.1.1",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1",
+    "rimraf": "^3.0.0",
+    "@types/react": "^18.0.12",
+    "@types/react-dom": "^18.0.5"
+  }
+}
