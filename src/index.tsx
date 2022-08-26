@@ -23,8 +23,8 @@ import {
 } from "spectacle";
 import { createRoot } from "react-dom/client";
 
-const formidableLogo =
-  "https://avatars2.githubusercontent.com/u/5078602?s=280&v=4";
+import autocomplete from "./autocomplete.png";
+console.log("autocomplete", autocomplete);
 
 // SPECTACLE_CLI_THEME_START
 const theme = {
@@ -80,7 +80,7 @@ const Presentation = () => (
     <Slide>
       <FlexBox height="100%" flexDirection="column">
         <Heading margin="0px" fontSize="h1">
-          ✨Why TypeScript matters ✨
+          ✨ Why TypeScript matters ✨
         </Heading>
         <Heading margin="0px" fontSize="h2">
           Jesper Håkansson
@@ -104,7 +104,7 @@ const Presentation = () => (
       }}
       backgroundColor="tertiary"
     >
-      <Heading>Vad är TypeScript?</Heading>
+      <Heading fontSize="h3">Vad är TypeScript?</Heading>
       <UnorderedList>
         <ListItem>TypeScript är JavaScript fast med syntax för typer</ListItem>
         <ListItem>Starkt typat språk som transpilerar till JavaScript</ListItem>
@@ -113,7 +113,7 @@ const Presentation = () => (
           Open source, finns på Github:{" "}
           <Link href="https://github.com/Microsoft/TypeScript">
             https://github.com/Microsoft/TypeScript
-          </Link> {" "} 
+          </Link>{" "}
           (över 80k stars)
         </ListItem>
         <ListItem>Funnits sedan 2012</ListItem>
@@ -129,133 +129,146 @@ const Presentation = () => (
       </Notes>
     </Slide>
     <Slide>
-      <Heading>Animated Elements</Heading>
-      <OrderedList>
+      <Heading fontSize="h3">Vad innebär ett starkt typat språk?</Heading>
+      <UnorderedList>
         <Appear>
-          <ListItem>Elements can animate in!</ListItem>
+          <ListItem>Strikta typ-regler i compile time</ListItem>
         </Appear>
         <Appear>
-          <ListItem>Out of order</ListItem>
-        </Appear>
-        <Appear priority={0}>
           <ListItem>
-            Just identify the order with the prop <CodeSpan>priority</CodeSpan>!
+            Kan ej få koden att kompilera fören vi upprätthåller korrekta typer
           </ListItem>
         </Appear>
-      </OrderedList>
-    </Slide>
-    <Slide>
-      <FlexBox>
-        <Text>These</Text>
-        <Text>Text</Text>
-        <Text color="secondary">Items</Text>
-        <Text fontWeight="bold">Flex</Text>
-      </FlexBox>
-      <Grid gridTemplateColumns="1fr 2fr" gridColumnGap={15}>
-        <Box backgroundColor="primary">
-          <Text color="secondary">Single-size Grid Item</Text>
-        </Box>
-        <Box backgroundColor="secondary">
-          <Text>Double-size Grid Item</Text>
-        </Box>
-      </Grid>
-      <Grid
-        gridTemplateColumns="1fr 1fr 1fr"
-        gridTemplateRows="1fr 1fr 1fr"
-        gridRowGap={1}
-      >
-        {Array(9)
-          .fill("")
-          .map((_, index) => (
-            <FlexBox paddingTop={0} key={`formidable-logo-${index}`} flex={1}>
-              <Image src={formidableLogo} width={100} />
-            </FlexBox>
-          ))}
-      </Grid>
-    </Slide>
-    <SlideFragments />
-    <Slide>
-      <CodePane language="jsx">{`
-        import { createClient, Provider } from 'urql';
-
-        const client = createClient({ url: 'https://0ufyz.sse.codesandbox.io' });
-
-        const App = () => (
-          <Provider value={client}>
-            <Todos />
-          </Provider>
-        );
+      </UnorderedList>
+      <Appear>
+        <CodePane language="jsx">{`
+            function compat(arr) {
+              if (orr.length > 10)
+                return arr.trim(0, 10)
+              return arr
+            }
         `}</CodePane>
-      <Box height={20} />
-      <CodePane language="java" showLineNumbers={false}>{`
-        public class NoLineNumbers {
-          public static void main(String[] args) {
-            System.out.println("Hello");
-          }
+      </Appear>
+
+      <Notes>
+        Ett starkt typat språk innebär strikta typ-regler i compile time. Vi kan
+        inte få koden att kompilera fören vi upprätthåller korrekta typer. Med
+        det kan vi hitta fel direkt i vår editor, innan koden körs. Till
+        skillnad mot löst typade språk som exempelvis JavaScript. Den här koden
+        ger inga fel i JavaScript-filer, och den kraschar i runtime. I
+        Typescript däremot så får vi fel direkt i editorn. Att rad 2 innehåller
+        en variabel som undefined, och att trim-funktionen inte finns på en
+        array.
+      </Notes>
+    </Slide>
+    <Slide>
+      <CodePane language="tsx">{`
+        function compat(arr: Array<string>) {
+          if (arr.length > 10)
+            return arr.slice(0, 10)
+          return arr
         }
         `}</CodePane>
+      <Appear>
+        <Text>En rad olika typer finns i TypeScript. Exempelvis:</Text>
+        <UnorderedList>
+          <ListItem>string</ListItem>
+          <ListItem>number</ListItem>
+          <ListItem>boolean</ListItem>
+          <ListItem>Array</ListItem>
+          <ListItem>Object</ListItem>
+        </UnorderedList>
+      </Appear>
     </Slide>
-    <div>
-      <Slide>
-        <Heading>This is a slide embedded in a div</Heading>
-      </Slide>
-    </div>
-    <MarkdownSlide componentProps={{ color: "yellow" }}>
-      {`
-        # This is a Markdown Slide
-
-        - You can pass props down to all elements on the slide.
-        - Just use the \`componentProps\` prop.
-        `}
-    </MarkdownSlide>
-    <MarkdownSlide animateListItems>
-      {`
-       # This is also a Markdown Slide
-
-       It uses the \`animateListItems\` prop.
-
-       - Its list items...
-       - ...will appear...
-       - ...one at a time.
-      `}
-    </MarkdownSlide>
     <Slide>
-      <Grid
-        gridTemplateColumns="50% 50%"
-        gridTemplateRows="50% 50%"
-        height="100%"
-      >
-        <FlexBox alignItems="center" justifyContent="center">
-          <Heading>This is a 4x4 Grid</Heading>
-        </FlexBox>
-        <FlexBox alignItems="center" justifyContent="center">
-          <Text textAlign="center">
-            With all the content aligned and justified center.
-          </Text>
-        </FlexBox>
-        <FlexBox alignItems="center" justifyContent="center">
-          <Text textAlign="center">
-            It uses Spectacle <CodeSpan>{"<Grid />"}</CodeSpan> and{" "}
-            <CodeSpan>{"<FlexBox />"}</CodeSpan> components.
-          </Text>
-        </FlexBox>
-        <FlexBox alignItems="center" justifyContent="center">
-          <Box width={200} height={200} backgroundColor="secondary" />
-        </FlexBox>
-      </Grid>
+      <Heading fontSize="h3">Varför är typer bra?</Heading>
+
+      <UnorderedList>
+        <Appear>
+          <ListItem>Autocomplete</ListItem>
+
+          <Image src={autocomplete} width={700} />
+        </Appear>
+        <Appear>
+          <ListItem>
+            Tydligare kod, intentioner direkt genom att läsa koden
+          </ListItem>
+        </Appear>
+      </UnorderedList>
+      <Notes>
+        Men varför är typer bra? Förutom att fånga fel i compile time så får vi
+        också en rad olika positiva effekter: - Autocomplete i vår editor
+      </Notes>
     </Slide>
-    <MarkdownSlideSet>
-      {`
-        # This is the first slide of a Markdown Slide Set
-        ---
-        # This is the second slide of a Markdown Slide Set
-        `}
-    </MarkdownSlideSet>
-    <SlideLayout.List
-      title="Slide layouts!"
-      items={["Two-column", "Lists", "And more!"]}
-      animateListItems
-    />
+    <Slide>
+      <UnorderedList>
+        <ListItem>Bättre utvecklarverktyg</ListItem>
+      </UnorderedList>
+      <Notes>
+        I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
+        eslint, codegen och codemods.
+      </Notes>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">
+        Varför <i>inte</i> typer?
+      </Heading>
+      <UnorderedList>
+        <ListItem>Mer komplext, jobbigt att typa allt</ListItem>
+        <ListItem>Extra byggsteg</ListItem>
+        <ListItem>Verbose</ListItem>
+        <ListItem>Problem/jobbigt med tredje-partskod</ListItem>
+        <ListItem>
+          Falsk säkerhet med typer. Även om typer hjälper mycket så kan koden
+          ändå ha buggar. Typer utesluter inte tester!
+        </ListItem>
+      </UnorderedList>
+      <Notes>
+        I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
+        eslint, codegen och codemods.
+      </Notes>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">
+        Varför <i>inte</i> typer?
+      </Heading>
+      <UnorderedList>
+        <ListItem>
+          Vi kan typa saker som <i>any</i>
+        </ListItem>
+        <ListItem>
+          Antagligen så använder man redan babel och någon nyare version av
+          EcmaScript och kräver bakåtkompabiltet
+        </ListItem>
+        <ListItem>Att typer är verbose är svårt att komma ifrån</ListItem>
+        <ListItem>
+          Problemet med tredje-partskod. I värsta fall kan man skapa en egen
+          modul av paketet och få det lika dåligt typat som om det vore
+          JavaScript
+        </ListItem>
+        <ListItem>
+          Falsk säkerhet med typer. Också svårt att komma ifrån
+        </ListItem>
+      </UnorderedList>
+      <Notes>
+        I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
+        eslint, codegen och codemods.
+      </Notes>
+    </Slide>
+    <Slide>
+      <Heading fontSize="h3">
+        Få in TypeScript i redan befintlig kodbas?
+      </Heading>
+
+      <UnorderedList>
+        <ListItem>
+          <CodeSpan color='primary'>yarn install typescript</CodeSpan>
+        </ListItem>
+        <ListItem>Lägg till "@babel/preset-typescript" i er .babelrc</ListItem>
+      </UnorderedList>
+    </Slide>
   </Deck>
 );
 

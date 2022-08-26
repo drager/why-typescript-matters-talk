@@ -36,6 +36,7 @@ const theme = {
     text: '"Ubuntu", Helvetica, Arial, sans-serif',
   },
 };
+
 // SPECTACLE_CLI_THEME_END
 
 // SPECTACLE_CLI_TEMPLATE_START
