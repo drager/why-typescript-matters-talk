@@ -21,10 +21,26 @@ import {
   Notes,
   SlideLayout,
 } from "spectacle";
+import gruvboxDark from "react-syntax-highlighter/dist/cjs/styles/prism/gruvbox-dark";
 import { createRoot } from "react-dom/client";
+import { CodePaneProps } from "spectacle/lib/components/code-pane";
 
 import autocomplete from "./autocomplete.png";
-console.log("autocomplete", autocomplete);
+import error from "./error.png";
+import help from "./help.png";
+import help2 from "./help2.png";
+
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+const GruvboxCodePane = ({
+  children,
+  language,
+  ...props
+}: Optional<CodePaneProps, "language">) => (
+  <CodePane theme={gruvboxDark} language={language || "tsx"} {...props}>
+    {children}
+  </CodePane>
+);
 
 // SPECTACLE_CLI_THEME_START
 const theme = {
@@ -139,16 +155,19 @@ const Presentation = () => (
             Kan ej få koden att kompilera fören vi upprätthåller korrekta typer
           </ListItem>
         </Appear>
+
+        <Appear>
+          <ListItem>
+            En rad olika typer finns i TypeScript. Exempelvis:
+          </ListItem>
+          <UnorderedList>
+            <ListItem>string</ListItem>
+            <ListItem>number</ListItem>
+            <ListItem>boolean</ListItem>
+            <ListItem>Array</ListItem>
+          </UnorderedList>
+        </Appear>
       </UnorderedList>
-      <Appear>
-        <CodePane language="jsx">{`
-            function compat(arr) {
-              if (orr.length > 10)
-                return arr.trim(0, 10)
-              return arr
-            }
-        `}</CodePane>
-      </Appear>
 
       <Notes>
         Ett starkt typat språk innebär strikta typ-regler i compile time. Vi kan
@@ -162,22 +181,25 @@ const Presentation = () => (
       </Notes>
     </Slide>
     <Slide>
-      <CodePane language="tsx">{`
-        function compat(arr: Array<string>) {
-          if (arr.length > 10)
-            return arr.slice(0, 10)
-          return arr
-        }
-        `}</CodePane>
+      <GruvboxCodePane language="jsx">{`
+function compat(arr) {
+  if (orr.length > 10) return arr.trim(0, 10);
+  return arr;
+}
+        `}</GruvboxCodePane>
+
+      <Box padding="1em" />
       <Appear>
-        <Text>En rad olika typer finns i TypeScript. Exempelvis:</Text>
-        <UnorderedList>
-          <ListItem>string</ListItem>
-          <ListItem>number</ListItem>
-          <ListItem>boolean</ListItem>
-          <ListItem>Array</ListItem>
-          <ListItem>Object</ListItem>
-        </UnorderedList>
+        <Image src={error} width="100%" />
+      </Appear>
+      <Box padding="1em" />
+      <Appear>
+        <GruvboxCodePane language="tsx">{`
+function compat(arr: Array<string>) {
+  if (arr.length > 10) return arr.slice(0, 10);
+  return arr;
+}
+        `}</GruvboxCodePane>
       </Appear>
     </Slide>
     <Slide>
@@ -185,14 +207,14 @@ const Presentation = () => (
 
       <UnorderedList>
         <Appear>
-          <ListItem>Autocomplete</ListItem>
+          <ListItem>Vi får mer hjälp av TypeScript</ListItem>
 
-          <Image src={autocomplete} width={700} />
+          <Image src={help} width="100%" />
+          <Image src={help2} width="100%" />
         </Appear>
+
         <Appear>
-          <ListItem>
-            Tydligare kod, intentioner direkt genom att läsa koden
-          </ListItem>
+          <ListItem>Refactorering av kod med självförtroende</ListItem>
         </Appear>
       </UnorderedList>
       <Notes>
@@ -201,8 +223,32 @@ const Presentation = () => (
       </Notes>
     </Slide>
     <Slide>
+      <Heading fontSize="h3">Varför är typer bra?</Heading>
+
       <UnorderedList>
-        <ListItem>Bättre utvecklarverktyg</ListItem>
+        <ListItem>Autocomplete</ListItem>
+
+        <Image src={autocomplete} width={1000} />
+      </UnorderedList>
+      <Notes>
+        Men varför är typer bra? Förutom att fånga fel i compile time så får vi
+        också en rad olika positiva effekter: - Autocomplete i vår editor
+      </Notes>
+    </Slide>
+    <Slide>
+      <UnorderedList>
+        <ListItem>
+          Tydligare kod, intentioner direkt genom att läsa koden
+        </ListItem>
+        <Appear>
+          <ListItem>Jump-to-definition</ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>Auto-import</ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>Bättre utvecklarverktyg</ListItem>
+        </Appear>
       </UnorderedList>
       <Notes>
         I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
@@ -223,6 +269,10 @@ const Presentation = () => (
           Falsk säkerhet med typer. Även om typer hjälper mycket så kan koden
           ändå ha buggar. Typer utesluter inte tester!
         </ListItem>
+        <ListItem>
+          Finns risk att TypeScript hamnar efter de senaste versionerna av
+          ECMAScript
+        </ListItem>
       </UnorderedList>
       <Notes>
         I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
@@ -232,7 +282,7 @@ const Presentation = () => (
 
     <Slide>
       <Heading fontSize="h3">
-        Varför <i>inte</i> typer?
+        Varför <i>inte</i> typer alternativ?
       </Heading>
       <UnorderedList>
         <ListItem>
@@ -258,15 +308,119 @@ const Presentation = () => (
       </Notes>
     </Slide>
     <Slide>
+      <Heading fontSize="h3">Visa kod!</Heading>
+      <GruvboxCodePane>
+        {`
+        const user = {
+          name: "Hayes",
+          id: 0,
+        };`}
+      </GruvboxCodePane>
+    </Slide>
+    <Slide>
       <Heading fontSize="h3">
         Få in TypeScript i redan befintlig kodbas?
       </Heading>
 
       <UnorderedList>
         <ListItem>
-          <CodeSpan color='primary'>yarn install typescript</CodeSpan>
+          <CodeSpan color="primary">
+            yarn add -D typescript @babel/preset-typescript
+          </CodeSpan>
         </ListItem>
         <ListItem>Lägg till "@babel/preset-typescript" i er .babelrc</ListItem>
+        <ListItem>tsc --init för att få en tsconfig.json</ListItem>
+        <ListItem>Sätt allowJs till true i tsconfig.json</ListItem>
+        <ListItem>
+          Bygg nya funktioner i TypeScript och importera gammal JavaScript-kod
+          🎉
+        </ListItem>
+      </UnorderedList>
+    </Slide>
+    <Slide>
+      <Heading fontSize="h3">Myter om TypeScript</Heading>
+
+      <UnorderedList>
+        <ListItem>
+          Det är inte JavaScript
+          <ListItem>
+            TypeScript följer noga ECMAScript. Implementerar stage 3 proposals
+          </ListItem>
+          <ListItem>Fungerar precis som JavaScript fast med typer</ListItem>
+        </ListItem>
+        <ListItem>
+          TypeScript är överflödigt, räcker att använda doc comments. E.g.
+          @param, @return
+        </ListItem>
+      </UnorderedList>
+    </Slide>
+    <Slide>
+      <UnorderedList>
+        <ListItem>
+          Man kan typa allt som <i>any</i> så det är inte är typesäkert. Absolut
+          möjligt men kan enforcas med regler:
+        </ListItem>
+        <GruvboxCodePane language="json">
+          {`
+// tsconfig.json
+{
+  ...
+  "compilerOptions": {
+    ...
+    "noImplicitAny": true
+  }
+}
+          `}
+        </GruvboxCodePane>
+      </UnorderedList>
+    </Slide>
+    <Slide>
+      <GruvboxCodePane language="ts">
+        {`
+
+type User = {
+  id: number;
+  username: string;
+  email: string;
+};
+
+const users: ReadonlyArray<User> = [
+  { id: 1, username: "jesper", email: "jesper@beanloop.se" },
+];
+
+export const getUser = ({ userId }: { userId: User["id"] }): User | null =>
+  users.find((user) => user.id === userId) || null;
+          `}
+      </GruvboxCodePane>
+
+      <Box padding="1em" />
+      <GruvboxCodePane language="js">
+        {`
+const users = [
+    { id: 1, username: "jesper", email: "jesper@beanloop.se" },
+];
+
+export const getUser = ({ userId }) => users.find((user) => user.id === userId) || null;
+        `}
+      </GruvboxCodePane>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Alternativ till TypeScript</Heading>
+      <UnorderedList>
+        <ListItem>
+          Flow.js - Facebooks statiska type-checker. I princip död.
+        </ListItem>
+        <ListItem>
+          Elm - Ett strikt funktionellt språk som kompilerar till JavaScript
+        </ListItem>
+        <ListItem>
+          PureScript - Också starkt typat funktionellt språk som komp till
+          JavaScript
+        </ListItem>
+        <ListItem>
+          ReasonML - Starkt typat språk kompilerar till JavaScript och OCaml
+        </ListItem>
       </UnorderedList>
     </Slide>
   </Deck>
