@@ -3,13 +3,9 @@ function compat(arr: Array<string>) {
   return arr;
 }
 
-
 const a = 0;
 const b = true;
 const result = a + b;
-
-
-
 
 function getUser() {}
 getUsers();

@@ -29,6 +29,7 @@ import autocomplete from "./autocomplete.png";
 import error from "./error.png";
 import help from "./help.png";
 import help2 from "./help2.png";
+import firstNameError from "./firstname_error.png";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
@@ -308,14 +309,138 @@ function compat(arr: Array<string>) {
       </Notes>
     </Slide>
     <Slide>
-      <Heading fontSize="h3">Visa kod!</Heading>
       <GruvboxCodePane>
         {`
-        const user = {
-          name: "Hayes",
-          id: 0,
-        };`}
+// TypeScript infer it as: {id: number, username: string, email: string}
+const user = { id: 1, username: "jesper", email: "jesper@beanloop.se" }; 
+        `}
       </GruvboxCodePane>
+
+      <Box padding="1em" />
+      <GruvboxCodePane>
+        {`
+type User = {
+  id: number;
+  username: string;
+  email: string;
+};
+
+const user: User = { id: 1, username: "jesper", email: "jesper@beanloop.se" }; 
+        `}
+      </GruvboxCodePane>
+
+      <Box padding="1em" />
+      <Image src={firstNameError} width="100%" />
+    </Slide>
+
+    <Slide>
+      <GruvboxCodePane>
+        {`
+          const getUser: User | null = () => // ...
+
+          const editUser = (user: User) => // ...
+        `}
+      </GruvboxCodePane>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Generics</Heading>
+
+      <GruvboxCodePane>
+        {`
+        `}
+      </GruvboxCodePane>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Union Type</Heading>
+
+      <GruvboxCodePane>
+        {`
+type User = {
+  id: number;
+  username: string;
+  email: string;
+};
+
+type GuestUser = {
+  username: string;
+};
+
+const getUsername = (user: User | GuestUser): string => user.username;
+        `}
+      </GruvboxCodePane>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Intersection Type</Heading>
+
+      <GruvboxCodePane>
+        {`
+import type { User } from "./user";
+
+type ErrorHandling = {
+  success: boolean;
+  error?: { message: string };
+};
+
+type UserReponse = User & ErrorHandling;
+
+const handleUserResponse = (userResponse: UserReponse): User | null => {
+  if (userResponse.error) {
+    // Report error to log service
+    return null;
+  }
+
+  return userResponse;
+};
+        `}
+      </GruvboxCodePane>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Tuples</Heading>
+
+      <GruvboxCodePane>
+        {`
+import type { User } from "./user";
+
+const getIdWithName = (user: User): [number, string] => {
+  return [user.id, user.username];
+};
+
+const [id, username] = getIdWithName({
+  id: 1,
+  username: "johndoe",
+  email: "johndoe@doe.doe",
+});
+        `}
+      </GruvboxCodePane>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Tuples</Heading>
+
+      <GruvboxCodePane>
+        {`
+import { useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+
+const MyButton = () => {
+  const [count, setCount]: [number, Dispatch<SetStateAction<number>>] =
+    useState(0);
+
+  const handleClick = () => {
+    setCount(count + 1);
+  };
+
+  return <button onClick={handleClick}>Clicked {count} times</button>;
+};
+        `}
+      </GruvboxCodePane>
+    </Slide>
+    <Slide>
+      <Heading fontSize="h3">Slide om Readonly</Heading>
     </Slide>
     <Slide>
       <Heading fontSize="h3">
