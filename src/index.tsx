@@ -30,6 +30,11 @@ import error from "./error.png";
 import help from "./help.png";
 import help2 from "./help2.png";
 import firstNameError from "./firstname_error.png";
+import readonlyError from "./readonly.png";
+import readonlyError1 from "./readonly-error-1.png";
+import readonlyError2 from "./readonly-error-2.png";
+import readonlyError3 from "./readonly-error-3.png";
+import readonlyError4 from "./readonly-error-4.png";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
@@ -74,23 +79,6 @@ const template = () => (
   </FlexBox>
 );
 // SPECTACLE_CLI_TEMPLATE_END
-
-const SlideFragments = () => (
-  <>
-    <Slide>
-      <Text>This is a slide fragment.</Text>
-    </Slide>
-    <Slide>
-      <Text>This is also a slide fragment.</Text>
-      <Appear>
-        <Text>This item shows up!</Text>
-      </Appear>
-      <Appear>
-        <Text>This item also shows up!</Text>
-      </Appear>
-    </Slide>
-  </>
-);
 
 const Presentation = () => (
   <Deck theme={theme} template={template} loop>
@@ -171,14 +159,20 @@ const Presentation = () => (
       </UnorderedList>
 
       <Notes>
-        Ett starkt typat språk innebär strikta typ-regler i compile time. Vi kan
-        inte få koden att kompilera fören vi upprätthåller korrekta typer. Med
-        det kan vi hitta fel direkt i vår editor, innan koden körs. Till
-        skillnad mot löst typade språk som exempelvis JavaScript. Den här koden
-        ger inga fel i JavaScript-filer, och den kraschar i runtime. I
-        Typescript däremot så får vi fel direkt i editorn. Att rad 2 innehåller
-        en variabel som undefined, och att trim-funktionen inte finns på en
-        array.
+        <UnorderedList>
+          <ListItem>
+            Ett starkt typat språk innebär strikta typ-regler i compile time. Vi
+            kan inte få koden att kompilera fören vi upprätthåller korrekta
+            typer. Med det kan vi hitta fel direkt i vår editor, innan koden
+            körs. Till skillnad mot löst typade språk som exempelvis JavaScript
+            där vi märker felen i runtime, när dom faktiskt händer.
+          </ListItem>
+          <ListItem>
+            Vi har en hel del olika typer i TypeScript, några av dom är string,
+            number, boolean och Array. Vi kommer kika närmare senare hur man
+            använder dom och dessutom visa lite fler.
+          </ListItem>
+        </UnorderedList>
       </Notes>
     </Slide>
     <Slide>
@@ -201,6 +195,25 @@ function compat(arr: Array<string>) {
   return arr;
 }
         `}</GruvboxCodePane>
+        <Notes>
+          <UnorderedList>
+            <ListItem>
+              Här har vi lite JavaScript-kod som är lite knasigt skriven. Ni
+              kanske ser felen i den här koden, men vi får tyvärr inga fel i vår
+              editor och koden kraschar i runtime.
+            </ListItem>
+            <ListItem>
+              Men skriver vi den här koden i TypeScript så får vi däremot fel
+              direkt i editorn. Att rad 2 innehåller en variabel som inte finns,
+              och att trim-funktionen inte finns på en array.
+            </ListItem>
+            <ListItem>
+              Och sist ser vi funktionen skriven helt i TypeScript och dessutom
+              rättad efter felen som TypeScript visade oss. Dvs att det är arr
+              och inte orr och att det är slice vi vill ha och inte trim.
+            </ListItem>
+          </UnorderedList>
+        </Notes>
       </Appear>
     </Slide>
     <Slide>
@@ -219,8 +232,27 @@ function compat(arr: Array<string>) {
         </Appear>
       </UnorderedList>
       <Notes>
-        Men varför är typer bra? Förutom att fånga fel i compile time så får vi
-        också en rad olika positiva effekter: - Autocomplete i vår editor
+        <UnorderedList>
+          <ListItem>
+            Så varför är typer bra? Vi får som sagt hjälp i compile time av
+            TypeScript.
+          </ListItem>
+          <ListItem>
+            Här ser vi en enkel felstavning när vi försöker kalla på en
+            funktion, och TypeScript ger oss till och med förslag på vilken
+            funktion vi kanske vill egentligen kalla på.
+          </ListItem>
+          <ListItem>
+            Vi ser också att vi inte kan addera en siffra med en boolean.
+          </ListItem>
+
+          <ListItem>
+            fånga fel i compile time är absolut en av dom största positiva
+            effekterna vi kan få. Men vi får faktiskt en hel del andra positiva
+            effekter:
+          </ListItem>
+          <ListItem></ListItem>
+        </UnorderedList>
       </Notes>
     </Slide>
     <Slide>
@@ -348,12 +380,19 @@ const user: User = { id: 1, username: "jesper", email: "jesper@beanloop.se" };
 
       <GruvboxCodePane>
         {`
+function reverse<T>(items: Array<T>) {
+  return items.map((_item, index) => items[items.length - 1 - index]);
+}
+
+reverse([1, 2, 3, 4, 5]);
+
+reverse(["A", "B", "C", "D", "E"]);
         `}
       </GruvboxCodePane>
     </Slide>
 
     <Slide>
-      <Heading fontSize="h3">Union Type</Heading>
+      <Heading fontSize="h3">Unions</Heading>
 
       <GruvboxCodePane>
         {`
@@ -373,7 +412,7 @@ const getUsername = (user: User | GuestUser): string => user.username;
     </Slide>
 
     <Slide>
-      <Heading fontSize="h3">Intersection Type</Heading>
+      <Heading fontSize="h3">Intersection</Heading>
 
       <GruvboxCodePane>
         {`
@@ -439,8 +478,108 @@ const MyButton = () => {
         `}
       </GruvboxCodePane>
     </Slide>
+
     <Slide>
-      <Heading fontSize="h3">Slide om Readonly</Heading>
+      <Heading fontSize="h3">Enums</Heading>
+
+      <GruvboxCodePane>
+        {`
+enum Color {
+  Red,
+  Green,
+  Blue,
+}
+
+const getColor = (color: Color): string => {
+  switch (color) {
+    case Color.Red:
+      return "#FF0000";
+    case Color.Green:
+      return "#00FF00";
+    case Color.Blue:
+      return "#0000FF";
+  }
+};
+        `}
+      </GruvboxCodePane>
+    </Slide>
+    <Slide>
+      <Heading fontSize="h3">Readonly</Heading>
+
+      <GruvboxCodePane>
+        {`
+const items = [1, 2, 3];
+items.push(230);
+items[0] = 100;
+
+const point = { x: 10, y: 20 };
+point.x = 20;
+point.y = 40;
+        `}
+      </GruvboxCodePane>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Readonly</Heading>
+
+      <GruvboxCodePane>
+        {`
+
+let readonlyItems: ReadonlyArray<number> = [1, 2, 3];
+
+readonlyItems.push(230);
+readonlyItems[0] = 100;
+        `}
+      </GruvboxCodePane>
+      <Box padding="1em" />
+
+      <FlexBox>
+        <Appear>
+          <Image src={readonlyError} width="500px" />
+        </Appear>
+
+        <Box padding="1em" />
+        <FlexBox flexDirection="column">
+          <Appear>
+            <Image src={readonlyError1} width="800px" />
+          </Appear>
+
+          <Box padding="1em" />
+
+          <Appear>
+            <Image src={readonlyError2} width="800px" />
+          </Appear>
+        </FlexBox>
+      </FlexBox>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Readonly</Heading>
+
+      <GruvboxCodePane>
+        {`
+
+type ReadonlyPoint = {
+  readonly x: number;
+  readonly y: number;
+};
+
+const readonlyPoint: ReadonlyPoint = { x: 10, y: 20 };
+
+readonlyPoint.x = 20;
+readonlyPoint.y = 40;
+
+        `}
+      </GruvboxCodePane>
+      <Box padding="1em" />
+
+      <Appear>
+        <FlexBox>
+          <Image src={readonlyError3} width="100%" />
+          <Box padding="1em" />
+          <Image src={readonlyError4} width="100%" />
+        </FlexBox>
+      </Appear>
     </Slide>
     <Slide>
       <Heading fontSize="h3">
@@ -454,7 +593,9 @@ const MyButton = () => {
           </CodeSpan>
         </ListItem>
         <ListItem>Lägg till "@babel/preset-typescript" i er .babelrc</ListItem>
-        <ListItem>tsc --init för att få en tsconfig.json</ListItem>
+        <ListItem>
+          tsc --init för att få en tsconfig.json med default-värden
+        </ListItem>
         <ListItem>Sätt allowJs till true i tsconfig.json</ListItem>
         <ListItem>
           Bygg nya funktioner i TypeScript och importera gammal JavaScript-kod
@@ -466,37 +607,24 @@ const MyButton = () => {
       <Heading fontSize="h3">Myter om TypeScript</Heading>
 
       <UnorderedList>
-        <ListItem>
-          Det är inte JavaScript
-          <ListItem>
-            TypeScript följer noga ECMAScript. Implementerar stage 3 proposals
-          </ListItem>
-          <ListItem>Fungerar precis som JavaScript fast med typer</ListItem>
-        </ListItem>
+        <ListItem>Det är inte JavaScript</ListItem>
         <ListItem>
           TypeScript är överflödigt, räcker att använda doc comments. E.g.
           @param, @return
         </ListItem>
+        <ListItem>
+          Man kan typa allt som <i>any</i> så det är inte är typesäkert
+        </ListItem>
       </UnorderedList>
     </Slide>
     <Slide>
+      <Heading fontSize="h3">Det är inte JavaScript</Heading>
       <UnorderedList>
         <ListItem>
-          Man kan typa allt som <i>any</i> så det är inte är typesäkert. Absolut
-          möjligt men kan enforcas med regler:
+          TypeScript följer noga ECMAScript. Implementerar stage 3 proposals
         </ListItem>
-        <GruvboxCodePane language="json">
-          {`
-// tsconfig.json
-{
-  ...
-  "compilerOptions": {
-    ...
-    "noImplicitAny": true
-  }
-}
-          `}
-        </GruvboxCodePane>
+
+        <ListItem>Fungerar som JavaScript fast med typer</ListItem>
       </UnorderedList>
     </Slide>
     <Slide>
@@ -527,6 +655,124 @@ const users = [
 
 export const getUser = ({ userId }) => users.find((user) => user.id === userId) || null;
         `}
+      </GruvboxCodePane>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Men enums finns ju inte i JavaScript?</Heading>
+
+      <FlexBox flexDirection="row" justifyContent="flexStart">
+        <GruvboxCodePane
+          language="js"
+          style={{ width: 650, overflow: "hidden" }}
+        >
+          {`
+enum Color {
+  Red,
+  Green,
+  Blue,
+}
+
+const getColor = (color: Color): string => {
+  switch (color) {
+    case Color.Red:
+      return "#FF0000";
+    case Color.Green:
+      return "#00FF00";
+    case Color.Blue:
+      return "#0000FF";
+  }
+};
+        `}
+        </GruvboxCodePane>
+
+        <Box padding="1em" />
+        <GruvboxCodePane
+          language="js"
+          style={{ width: 600, overflow: "hidden" }}
+        >
+          {`
+"use strict";
+var Color;
+(function (Color) {
+    Color[Color["Red"] = 0] = "Red";
+    Color[Color["Green"] = 1] = "Green";
+    Color[Color["Blue"] = 2] = "Blue";
+})(Color || (Color = {}));
+const getColor = (color) => {
+    switch (color) {
+        case Color.Red:
+            return "#FF0000";
+        case Color.Green:
+            return "#00FF00";
+        case Color.Blue:
+            return "#0000FF";
+    }
+};
+        `}
+        </GruvboxCodePane>
+      </FlexBox>
+    </Slide>
+    <Slide>
+      <FlexBox flexDirection="row" justifyContent="flexStart">
+        <GruvboxCodePane
+          language="js"
+          style={{ width: 650, overflow: "hidden" }}
+        >
+          {`
+const enum Color {
+  Red,
+  Green,
+  Blue,
+}
+
+const getColor = (color: Color): string => {
+  switch (color) {
+    case Color.Red:
+      return "#FF0000";
+    case Color.Green:
+      return "#00FF00";
+    case Color.Blue:
+      return "#0000FF";
+  }
+};
+        `}
+        </GruvboxCodePane>
+
+        <Box padding="1em" />
+        <GruvboxCodePane
+          language="js"
+          style={{ width: 600, overflow: "hidden" }}
+        >
+          {`
+"use strict";
+const getColor = (color) => {
+    switch (color) {
+        case Color.Red:
+            return "#FF0000";
+        case Color.Green:
+            return "#00FF00";
+        case Color.Blue:
+            return "#0000FF";
+    }
+};
+        `}
+        </GruvboxCodePane>
+      </FlexBox>
+    </Slide>
+    <Slide>
+      <Heading fontSize="h3">any</Heading>
+      <GruvboxCodePane language="json">
+        {`
+// tsconfig.json
+{
+  ...
+  "compilerOptions": {
+    ...
+    "noImplicitAny": true
+  }
+}
+          `}
       </GruvboxCodePane>
     </Slide>
 
