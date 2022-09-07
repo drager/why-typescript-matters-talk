@@ -12,9 +12,6 @@ const readonlyItems: ReadonlyArray<number> = [1, 2, 3];
 readonlyItems.push(230);
 readonlyItems[0] = 100;
 
-
-
-
 type ReadonlyPoint = {
   readonly x: number;
   readonly y: number;

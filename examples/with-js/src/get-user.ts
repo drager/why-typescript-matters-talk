@@ -12,3 +12,10 @@ const users: ReadonlyArray<User> = [
 
 export const getUser = ({ userId }: { userId: User["id"] }): User | null =>
   users.find((user) => user.id === userId) || null;
+
+export const withBooks = () => {
+  const user = getUser({ userId: 1 });
+  const books = getBooksByUser({ user });
+
+  return books;
+};

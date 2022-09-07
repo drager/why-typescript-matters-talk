@@ -29,6 +29,9 @@ import readonlyError1 from "./readonly-error-1.png";
 import readonlyError2 from "./readonly-error-2.png";
 import readonlyError3 from "./readonly-error-3.png";
 import readonlyError4 from "./readonly-error-4.png";
+import noAnyError from "./no-any-1.png";
+import noAnyError2 from "./no-any-2.png";
+import { CSSProperties } from "react";
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
@@ -36,7 +39,7 @@ const GruvboxCodePane = ({
   children,
   language,
   ...props
-}: Optional<CodePaneProps, "language">) => (
+}: Optional<CodePaneProps, "language"> & { style?: CSSProperties }) => (
   <CodePane theme={gruvboxDark} language={language || "tsx"} {...props}>
     {children}
   </CodePane>
@@ -161,7 +164,7 @@ const Presentation = () => (
       </UnorderedList>
 
       <Notes>
-        <UnorderedList>
+        <UnorderedList color="#fff">
           <ListItem>
             Ett starkt typat språk innebär strikta typ-regler i compile time. Vi
             kan inte få koden att kompilera fören vi upprätthåller korrekta
@@ -198,7 +201,7 @@ function compat(arr: Array<string>) {
 }
         `}</GruvboxCodePane>
         <Notes>
-          <UnorderedList>
+          <UnorderedList color="#fff">
             <ListItem>
               Här har vi lite JavaScript-kod som är lite knasigt skriven. Ni
               kanske ser felen i den här koden, men vi får tyvärr inga fel i vår
@@ -234,7 +237,7 @@ function compat(arr: Array<string>) {
         </Appear>
       </UnorderedList>
       <Notes>
-        <UnorderedList>
+        <UnorderedList color="#fff">
           <ListItem>
             Så varför är typer bra? Vi får som sagt hjälp i compile time av
             TypeScript.
@@ -249,11 +252,18 @@ function compat(arr: Array<string>) {
           </ListItem>
 
           <ListItem>
-            fånga fel i compile time är absolut en av dom största positiva
+            Fånga fel i compile time är absolut en av dom största positiva
             effekterna vi kan få. Men vi får faktiskt en hel del andra positiva
-            effekter:
+            effekter som refactorering av kod med självförtroende.
           </ListItem>
-          <ListItem></ListItem>
+          <ListItem>
+            Men vad betyder refactorering av kod med självförtroende egentligen?
+            Jo, har vi typat allt bra och ändrar på kod någonstans, till exempel
+            ändrar på hur ett objekt ser ut, att en property inte längre finns
+            eller ändrat namn på en property eller liknande. När koden väl
+            kompilerar då är vi klara med refactorering och slipper få undefined
+            i runtime i och med att property in längre finns.
+          </ListItem>
         </UnorderedList>
       </Notes>
     </Slide>
@@ -266,11 +276,16 @@ function compat(arr: Array<string>) {
         <Image src={autocomplete} width={1000} />
       </UnorderedList>
       <Notes>
-        Men varför är typer bra? Förutom att fånga fel i compile time så får vi
-        också en rad olika positiva effekter: - Autocomplete i vår editor
+        <UnorderedList color="#fff">
+          <ListItem>
+            Något annat som är mycket trevligt är att vi får bra autocomplete i
+            vår editor med hjälp av TypeScript
+          </ListItem>
+        </UnorderedList>
       </Notes>
     </Slide>
     <Slide>
+      <Heading fontSize="h3">Varför är typer bra?</Heading>
       <UnorderedList>
         <ListItem>
           Tydligare kod, intentioner direkt genom att läsa koden
@@ -297,17 +312,27 @@ function compat(arr: Array<string>) {
       </Heading>
       <UnorderedList>
         <ListItem>Mer komplext, jobbigt att typa allt</ListItem>
-        <ListItem>Extra byggsteg</ListItem>
-        <ListItem>Verbose</ListItem>
-        <ListItem>Problem/jobbigt med tredje-partskod</ListItem>
-        <ListItem>
-          Falsk säkerhet med typer. Även om typer hjälper mycket så kan koden
-          ändå ha buggar. Typer utesluter inte tester!
-        </ListItem>
-        <ListItem>
-          Finns risk att TypeScript hamnar efter de senaste versionerna av
-          ECMAScript
-        </ListItem>
+        <Appear>
+          <ListItem>Extra byggsteg</ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>Verbose</ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>Problem/jobbigt med tredje-partskod</ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>
+            Falsk säkerhet med typer. Även om typer hjälper mycket så kan koden
+            ändå ha buggar. Typer utesluter inte tester!
+          </ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>
+            Finns risk att TypeScript hamnar efter de senaste versionerna av
+            ECMAScript
+          </ListItem>
+        </Appear>
       </UnorderedList>
       <Notes>
         I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
@@ -317,24 +342,37 @@ function compat(arr: Array<string>) {
 
     <Slide>
       <Heading fontSize="h3">
-        Varför <i>inte</i> typer alternativ?
+        Varför <i>inte</i> typer
       </Heading>
       <UnorderedList>
         <ListItem>
-          Vi kan typa saker som <i>any</i>
+          TypeScript inferar faktiskt typer. Finns en escape hatch och det är
+          att typa saker som <i>any</i>. Dock ej bra!
         </ListItem>
         <ListItem>
           Antagligen så använder man redan babel och någon nyare version av
           EcmaScript och kräver bakåtkompabiltet
         </ListItem>
         <ListItem>Att typer är verbose är svårt att komma ifrån</ListItem>
+      </UnorderedList>
+      <Notes>
+        I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
+        eslint, codegen och codemods.
+      </Notes>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">
+        Varför <i>inte</i> typer
+      </Heading>
+      <UnorderedList>
         <ListItem>
-          Problemet med tredje-partskod. I värsta fall kan man skapa en egen
-          modul av paketet och få det lika dåligt typat som om det vore
-          JavaScript
+          Problem med tredje-partskod. I värsta fall kan man skapa egna
+          TypeScript typer av paketet och typa upp det så gott man kan,
+          alternativt få det lika dåligt typat som om det vore JavaScript
         </ListItem>
         <ListItem>
-          Falsk säkerhet med typer. Också svårt att komma ifrån
+          Falsk säkerhet med typer. Också svårt att komma ifrån.
         </ListItem>
       </UnorderedList>
       <Notes>
@@ -343,14 +381,18 @@ function compat(arr: Array<string>) {
       </Notes>
     </Slide>
     <Slide>
-      <GruvboxCodePane>
-        {`
+      <Heading fontSize="h3">Dags för lite kod! 🎉</Heading>
+      <Appear>
+        <GruvboxCodePane>
+          {`
 // TypeScript infer it as: {id: number, username: string, email: string}
 const user = { id: 1, username: "jesper", email: "jesper@beanloop.se" }; 
         `}
-      </GruvboxCodePane>
+        </GruvboxCodePane>
+      </Appear>
+    </Slide>
 
-      <Box padding="1em" />
+    <Slide>
       <GruvboxCodePane>
         {`
 type User = {
@@ -364,15 +406,19 @@ const user: User = { id: 1, username: "jesper", email: "jesper@beanloop.se" };
       </GruvboxCodePane>
 
       <Box padding="1em" />
-      <Image src={firstNameError} width="100%" />
+      <Appear>
+        <Image src={firstNameError} width="100%" />
+      </Appear>
     </Slide>
 
     <Slide>
       <GruvboxCodePane>
         {`
-          const getUser: User | null = () => // ...
+import type { User } from "./user";
 
-          const editUser = (user: User) => // ...
+const getUser: User | null = () => // ...
+
+const editUser = (user: User) => // ...
         `}
       </GruvboxCodePane>
     </Slide>
@@ -487,9 +533,9 @@ const MyButton = () => {
       <GruvboxCodePane>
         {`
 enum Color {
-  Red,
-  Green,
-  Blue,
+  Red // 0,
+  Green // 1,
+  Blue // 2,
 }
 
 const getColor = (color: Color): string => {
@@ -504,6 +550,41 @@ const getColor = (color: Color): string => {
 };
         `}
       </GruvboxCodePane>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Enums</Heading>
+      <GruvboxCodePane>
+        {`
+enum Direction {
+  Up = "UP",
+  Down = "DOWN",
+  Left = "LEFT",
+  Right = "RIGHT",
+}
+        `}
+      </GruvboxCodePane>
+      <Box padding="1em" />
+      <Appear>
+        <GruvboxCodePane>
+          {`
+// Don't do this
+enum BooleanLikeHeterogeneousEnum {
+  Yes = "YES",
+  No = 0,
+}
+        `}
+        </GruvboxCodePane>
+      </Appear>
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>Enums kan också innehålla strängar</ListItem>
+          <ListItem>
+            Det är möjligt att mixa sträng-enums med siffer-enums. Det är dock
+            inte rekommenderat att användas så
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
     <Slide>
       <Heading fontSize="h3">Readonly</Heading>
@@ -632,7 +713,7 @@ readonlyPoint.y = 40;
     <Slide>
       <GruvboxCodePane language="ts">
         {`
-
+// get-user.ts
 type User = {
   id: number;
   username: string;
@@ -649,15 +730,18 @@ export const getUser = ({ userId }: { userId: User["id"] }): User | null =>
       </GruvboxCodePane>
 
       <Box padding="1em" />
-      <GruvboxCodePane language="js">
-        {`
+      <Appear>
+        <GruvboxCodePane language="js">
+          {`
+// get-user.js
 const users = [
     { id: 1, username: "jesper", email: "jesper@beanloop.se" },
 ];
 
 export const getUser = ({ userId }) => users.find((user) => user.id === userId) || null;
         `}
-      </GruvboxCodePane>
+        </GruvboxCodePane>
+      </Appear>
     </Slide>
 
     <Slide>
@@ -689,11 +773,12 @@ const getColor = (color: Color): string => {
         </GruvboxCodePane>
 
         <Box padding="1em" />
-        <GruvboxCodePane
-          language="js"
-          style={{ width: 600, overflow: "hidden" }}
-        >
-          {`
+        <Appear>
+          <GruvboxCodePane
+            language="js"
+            style={{ width: 600, overflow: "hidden" }}
+          >
+            {`
 "use strict";
 var Color;
 (function (Color) {
@@ -712,11 +797,12 @@ const getColor = (color) => {
     }
 };
         `}
-        </GruvboxCodePane>
+          </GruvboxCodePane>
+        </Appear>
       </FlexBox>
     </Slide>
     <Slide>
-      <Heading fontSize="h3">const enums</Heading>
+      <Heading fontSize="h3">const enums till räddningen</Heading>
       <FlexBox flexDirection="row" justifyContent="flexStart">
         <GruvboxCodePane
           language="js"
@@ -743,11 +829,12 @@ const getColor = (color: Color): string => {
         </GruvboxCodePane>
 
         <Box padding="1em" />
-        <GruvboxCodePane
-          language="js"
-          style={{ width: 600, overflow: "hidden" }}
-        >
-          {`
+        <Appear>
+          <GruvboxCodePane
+            language="js"
+            style={{ width: 600, overflow: "hidden" }}
+          >
+            {`
 "use strict";
 const getColor = (color) => {
     switch (color) {
@@ -760,14 +847,32 @@ const getColor = (color) => {
     }
 };
         `}
-        </GruvboxCodePane>
+          </GruvboxCodePane>
+        </Appear>
       </FlexBox>
     </Slide>
+
     <Slide>
-      <Heading fontSize="h3">any</Heading>
-      <GruvboxCodePane language="json">
-        {`
-// tsconfig.json
+      <Heading fontSize="h3">Doc comments</Heading>
+
+      <UnorderedList>
+        <ListItem>
+          Absolut bra, men det är sällan dokumentation hänger med implementation
+        </ListItem>
+        <ListItem>
+          Vi kan använda både och med TypeScript. Doc comments funkar
+          fortfarande, en aning överflödigt dock. Men @examples och beskrivning
+          kan fortfarande vara ett trevligt komplement!
+        </ListItem>
+      </UnorderedList>
+    </Slide>
+    <Slide>
+      <Heading fontSize="h3">
+        Man kan typa allt som <i>any</i>
+      </Heading>
+      <Appear>
+        <GruvboxCodePane language="json">
+          {`
 {
   ...
   "compilerOptions": {
@@ -776,14 +881,52 @@ const getColor = (color) => {
   }
 }
           `}
+        </GruvboxCodePane>
+      </Appear>
+      <Box padding="1em" />
+      <Appear>
+        <GruvboxCodePane language="js">
+          {`
+module.exports = {
+  plugins: ["@typescript-eslint"],
+  extends: [...],
+  rules: {
+    "@typescript-eslint/no-explicit-any": "error",
+  },
+};
+          `}
+        </GruvboxCodePane>
+      </Appear>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">
+        Man kan typa allt som <i>any</i>
+      </Heading>
+      <GruvboxCodePane>
+        {`
+const p;
+
+const age: any = "seventeen";
+          `}
       </GruvboxCodePane>
+      <Box padding="1em" />
+
+      <Appear>
+        <Image src={noAnyError} width="1000px" />
+      </Appear>
+
+      <Box padding="1em" />
+      <Appear>
+        <Image src={noAnyError2} width="1000px" />
+      </Appear>
     </Slide>
 
     <Slide>
       <Heading fontSize="h3">Alternativ till TypeScript</Heading>
       <UnorderedList>
         <ListItem>
-          Flow.js - Facebooks statiska type-checker. I princip utdöd.
+          Flow.js - Facebooks statiska type-checker. I princip utdött.
         </ListItem>
         <ListItem>
           Elm - Ett strikt funktionellt språk som kompilerar till JavaScript
@@ -799,8 +942,39 @@ const getColor = (color) => {
       </UnorderedList>
     </Slide>
     <Slide>
-      <Heading fontSize="h3">Tips och tricks</Heading>
+      <FlexBox height="100%" flexDirection="column">
+        <Heading margin="0px" fontSize="h1">
+          Tack för mig
+        </Heading>
+        <Heading margin="0px" fontSize="h1">
+          Frågor?
+        </Heading>
+      </FlexBox>
     </Slide>
+    {/*<Slide>*/}
+    {/*<Heading fontSize="h3">Tips och tricks</Heading>*/}
+    {/*<GruvboxCodePane>*/}
+    {/*{`*/}
+    {/*enum Direction {*/}
+    {/*Up = "Upp",*/}
+    {/*Down = "Ner",*/}
+    {/*Left = "Vänster",*/}
+    {/*Right = "Höger",*/}
+    {/*}*/}
+
+    {/*Object.values(Direction); // [ 'Upp', 'Ner', 'Vänster', 'Höger' ]*/}
+
+    {/*`}*/}
+    {/*</GruvboxCodePane>*/}
+    {/*<Notes>*/}
+    {/*<UnorderedList color="#fff">*/}
+    {/*<ListItem>*/}
+    {/*Dock inte möjligt att göra med const enums då dom försvinner efter*/}
+    {/*koden blivit JavaScript-kod.*/}
+    {/*</ListItem>*/}
+    {/*</UnorderedList>*/}
+    {/*</Notes>*/}
+    {/*</Slide>*/}
   </Deck>
 );
 
