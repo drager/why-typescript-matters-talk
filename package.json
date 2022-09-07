@@ -1,7 +1,7 @@
 {
-  "name": "tech-heads-talk",
+  "name": "why-typescript-matters-talk",
   "version": "1.0.0",
-  "description": "Talk for tech head conferance",
+  "description": "Talk about TypeScript",
   "scripts": {
     "clean": "rimraf dist",
     "build": "webpack",

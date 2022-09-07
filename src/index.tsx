@@ -3,7 +3,6 @@ import {
   Heading,
   UnorderedList,
   CodeSpan,
-  OrderedList,
   ListItem,
   FullScreen,
   AnimatedProgress,
@@ -11,15 +10,10 @@ import {
   Slide,
   Deck,
   Link,
-  Text,
-  Grid,
   Box,
   Image,
   CodePane,
-  MarkdownSlide,
-  MarkdownSlideSet,
   Notes,
-  SlideLayout,
 } from "spectacle";
 import gruvboxDark from "react-syntax-highlighter/dist/cjs/styles/prism/gruvbox-dark";
 import { createRoot } from "react-dom/client";
@@ -48,16 +42,21 @@ const GruvboxCodePane = ({
   </CodePane>
 );
 
+const red = "#f96555";
+const teal = "#0097a9";
+const dark = "#1d1c21";
+const purple = "#6a49f5";
+
 // SPECTACLE_CLI_THEME_START
 const theme = {
   fonts: {
-    header: '"Ubuntu", Helvetica, Arial, sans-serif',
-    text: '"Ubuntu", Helvetica, Arial, sans-serif',
+    header: '"Encode Sans", Helvetica, Arial, sans-serif',
+    text: '"Encode Sans", Helvetica, Arial, sans-serif',
   },
   colors: {
-    tertiary: "#5d2a42",
-    primary: "#93b5c6",
-    secondary: "#93b5c6",
+    tertiary: teal,
+    primary: dark,
+    secondary: dark,
   },
 };
 // SPECTACLE_CLI_THEME_END
@@ -71,10 +70,13 @@ const template = () => (
     width={1}
   >
     <Box padding="0 1em">
-      <FullScreen />
+      <FullScreen color={theme.colors.primary} />
     </Box>
-    <Box padding="1em">
-      <AnimatedProgress />
+    <Box padding="0 1em 0 0">
+      <AnimatedProgress
+        pacmanColor={theme.colors.primary}
+        color={theme.colors.primary}
+      />
     </Box>
   </FlexBox>
 );
@@ -714,6 +716,7 @@ const getColor = (color) => {
       </FlexBox>
     </Slide>
     <Slide>
+      <Heading fontSize="h3">const enums</Heading>
       <FlexBox flexDirection="row" justifyContent="flexStart">
         <GruvboxCodePane
           language="js"
@@ -780,19 +783,23 @@ const getColor = (color) => {
       <Heading fontSize="h3">Alternativ till TypeScript</Heading>
       <UnorderedList>
         <ListItem>
-          Flow.js - Facebooks statiska type-checker. I princip död.
+          Flow.js - Facebooks statiska type-checker. I princip utdöd.
         </ListItem>
         <ListItem>
           Elm - Ett strikt funktionellt språk som kompilerar till JavaScript
         </ListItem>
         <ListItem>
-          PureScript - Också starkt typat funktionellt språk som komp till
+          PureScript - Också starkt typat funktionellt språk som kompilerar till
           JavaScript
         </ListItem>
         <ListItem>
-          ReasonML - Starkt typat språk kompilerar till JavaScript och OCaml
+          ReasonML - Starkt typat språk kompilerar till JavaScript och OCaml.
+          Kan nyttja både OCaml-paket och JavaScript-paket
         </ListItem>
       </UnorderedList>
+    </Slide>
+    <Slide>
+      <Heading fontSize="h3">Tips och tricks</Heading>
     </Slide>
   </Deck>
 );
