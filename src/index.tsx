@@ -86,7 +86,7 @@ const template = () => (
 // SPECTACLE_CLI_TEMPLATE_END
 
 const Presentation = () => (
-  <Deck theme={theme} template={template} loop>
+  <Deck theme={theme} template={template}>
     <Slide>
       <FlexBox height="100%" flexDirection="column">
         <Heading margin="0px" fontSize="h1">
@@ -116,26 +116,63 @@ const Presentation = () => (
     >
       <Heading fontSize="h3">Vad är TypeScript?</Heading>
       <UnorderedList>
-        <ListItem>TypeScript är JavaScript fast med syntax för typer</ListItem>
-        <ListItem>Starkt typat språk som transpilerar till JavaScript</ListItem>
-        <ListItem>Utvecklat av Microsoft</ListItem>
-        <ListItem>
-          Open source, finns på Github:{" "}
-          <Link href="https://github.com/Microsoft/TypeScript">
-            https://github.com/Microsoft/TypeScript
-          </Link>{" "}
-          (över 80k stars)
-        </ListItem>
-        <ListItem>Funnits sedan 2012</ListItem>
+        <Appear>
+          <ListItem>
+            TypeScript är JavaScript fast med syntax för typer
+          </ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>
+            Starkt typat språk som transpilerar till JavaScript
+          </ListItem>
+        </Appear>
+
+        <Appear>
+          <ListItem>Utvecklat av Microsoft</ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>
+            Open source, finns på Github:{" "}
+            <Link href="https://github.com/Microsoft/TypeScript">
+              https://github.com/Microsoft/TypeScript
+            </Link>{" "}
+            (över 80k stars)
+          </ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>Funnits sedan 2012</ListItem>
+        </Appear>
       </UnorderedList>
       <Notes>
-        Typescript är JavaScript fast med syntax för typer plus enums och annat
-        skoj. JavaScript i sig har ju en del primitiva typer, men inget som man
-        deklarerar när man använder språket. Det inferas av JavaScript runtimen,
-        vilket kan vara browsern, node.js eller någon annan runtime. Typescript
-        däremot är ett starkt typat språk som transpilerar till JavaScript.
-        Kommer berätta mer gällande en del typer som TypeScript har i senare
-        slides.
+        <UnorderedList color="#fff">
+          <ListItem>
+            Så vad är TypeScript då? Jo, Typescript är JavaScript fast med
+            syntax för typer plus enums och en hel del annat skoj, som jag
+            kommer visa senare.
+          </ListItem>
+          <ListItem>
+            JavaScript i sig har ju en del primitiva typer, men inget som man
+            deklarerar när man använder språket. Det inferas istället av
+            JavaScript-runtimen, vilket kan vara browsern, node.js eller någon
+            annan runtime. Har ju börjat komma fler och fler nu på senare tid.
+          </ListItem>
+          <ListItem>
+            TypeScript däremot är ett starkt typat språk och TypeScript
+            transpilerar till JavaScript, vilket betyder att när vi kör vår
+            TypeScript-kod genom TypeScripts kompiler så blir outputen
+            JavaScript-kod och inte maskinkod direkt. Med andra ord så kan
+            TypeScript köras överallt där JavaScript kan köras. Vi kan alltså
+            utveckla webbappar, mobilappar, tvappar etc med TypeScript också.
+          </ListItem>
+          <ListItem>
+            TypeScript är utvecklat och underhålls utav Microsoft.
+          </ListItem>
+          <ListItem>
+            Det utvecklas open source och källkoden finns på Github. Repot har
+            över 80k stars, och många fler användare över hela världen. Det har
+            funnits sedan 2012.
+          </ListItem>
+        </UnorderedList>
       </Notes>
     </Slide>
     <Slide>
@@ -165,17 +202,21 @@ const Presentation = () => (
 
       <Notes>
         <UnorderedList color="#fff">
+          <ListItem>Vad innebär ett starkt typat språk då?</ListItem>
           <ListItem>
-            Ett starkt typat språk innebär strikta typ-regler i compile time. Vi
-            kan inte få koden att kompilera fören vi upprätthåller korrekta
+            Ett starkt typat språk innebär att vi har strikta typ-regler i
+            compile time som vi måste uppfylla.
+          </ListItem>
+          <ListItem>
+            Vi kan inte få koden att kompilera fören vi upprätthåller korrekta
             typer. Med det kan vi hitta fel direkt i vår editor, innan koden
-            körs. Till skillnad mot löst typade språk som exempelvis JavaScript
+            körs. Till skillnad mot löst typade språk som exempelvis, JavaScript
             där vi märker felen i runtime, när dom faktiskt händer.
           </ListItem>
           <ListItem>
             Vi har en hel del olika typer i TypeScript, några av dom är string,
-            number, boolean och Array. Vi kommer kika närmare senare hur man
-            använder dom och dessutom visa lite fler.
+            number, boolean och Array. Vi kommer senare kika närmare hur man
+            använder dom och dessutom visa några fler.
           </ListItem>
         </UnorderedList>
       </Notes>
@@ -248,7 +289,9 @@ function compat(arr: Array<string>) {
             funktion vi kanske vill egentligen kalla på.
           </ListItem>
           <ListItem>
-            Vi ser också att vi inte kan addera en siffra med en boolean.
+            Vi ser också att vi inte kan addera en siffra med en boolean. Eller
+            ja, det är möjligt att göra det i JavaScript, men är förmodligen
+            inget vi egentligen ville göra.
           </ListItem>
 
           <ListItem>
@@ -262,7 +305,7 @@ function compat(arr: Array<string>) {
             ändrar på hur ett objekt ser ut, att en property inte längre finns
             eller ändrat namn på en property eller liknande. När koden väl
             kompilerar då är vi klara med refactorering och slipper få undefined
-            i runtime i och med att property in längre finns.
+            i runtime i och med att propertyn inte längre finns.
           </ListItem>
         </UnorderedList>
       </Notes>
@@ -301,8 +344,26 @@ function compat(arr: Array<string>) {
         </Appear>
       </UnorderedList>
       <Notes>
-        I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
-        eslint, codegen och codemods.
+        <UnorderedList color="#fff">
+          <ListItem>
+            Vi får också tydligare kod genom att skriva typer. Man kan se vissa
+            intentioner direkt genom att läsa koden.
+          </ListItem>
+          <ListItem>
+            Jump-to-definition får vi också, så vi kan snabbt och enkelt hoppa
+            in i källkoden och exempelvis läsa hur en funktion ser ut och
+            fungerar
+          </ListItem>
+          <ListItem>
+            Auto-import av funktioner genom en knapptrycking är otroligt skönt,
+            och behöva göra en manuell import är hyffsat segt
+          </ListItem>
+          <ListItem>
+            I och med typer så blir det också mindre tveksamheter för verktyg.
+            Vilket ger oss bättre utvecklarverktyg. Exempelvis eslint, codegen
+            och codemods.
+          </ListItem>
+        </UnorderedList>
       </Notes>
     </Slide>
 
@@ -335,66 +396,164 @@ function compat(arr: Array<string>) {
         </Appear>
       </UnorderedList>
       <Notes>
-        I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
-        eslint, codegen och codemods.
+        <UnorderedList color="#fff">
+          <ListItem>
+            Varför inte typer då? Det är mer komplext med typer. Det blir ett
+            extra steg som är jobbigt, dvs att vi ska behöva typa allt innan vi
+            kan köra koden
+          </ListItem>
+          <ListItem>
+            Vi får ett extra byggsteg att förhålla oss till. Bara det i sig är
+            mer komplext. Ett extra byggsteg gör det dessutom långsammare, att
+            behöva typchecka koden gör det långsammare.
+          </ListItem>
+          <ListItem>
+            Det blir mer verbose kod. Vi får ett extra lager ovanpå ett enklare
+            dynamiskt språk som JavaScript
+          </ListItem>
+          <ListItem>
+            Det kan bli problem med otypad eller feltypade tredje-partskod
+          </ListItem>
+          <ListItem>
+            Man kan få en falsk trygghet med typer. Även om typer hjälper mycket
+            så kan koden ändå ha buggar, men typer utesluter inte tester!
+          </ListItem>
+          <ListItem>
+            Det finns en risk att TypeScript hamnar efter de senaste versionerna
+            av ECMAScript, och ECMAScript jobbas ju på hela tiden med en rad
+            olika proposals
+          </ListItem>
+        </UnorderedList>
       </Notes>
     </Slide>
 
     <Slide>
       <Heading fontSize="h3">
-        Varför <i>inte</i> typer
+        Varför <i>inte</i> typer svar
       </Heading>
       <UnorderedList>
         <ListItem>
-          TypeScript inferar faktiskt typer. Finns en escape hatch och det är
-          att typa saker som <i>any</i>. Dock ej bra!
+          <i>Jobbigt att typa allt</i>: TypeScript inferar faktiskt typer, det
+          finns också en escape hatch och det är att typa saker som <i>any</i>.
+          Dock ej bra!
         </ListItem>
         <ListItem>
-          Antagligen så använder man redan babel och någon nyare version av
-          EcmaScript och kräver bakåtkompabiltet
+          <i>Extra byggsteg</i>: Antagligen så använder man redan babel och
+          någon nyare version av EcmaScript och kräver bakåtkompabiltet
         </ListItem>
-        <ListItem>Att typer är verbose är svårt att komma ifrån</ListItem>
+        <ListItem>
+          <i>Verbose</i>: Att typer är verbose är svårt att komma ifrån
+        </ListItem>
       </UnorderedList>
+
       <Notes>
-        I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
-        eslint, codegen och codemods.
+        <UnorderedList color="#fff">
+          <ListItem>
+            Om man tycker att det är jobbigt att typ allt hela tiden så kan man
+            faktiskt skippa det, TypeScript inferar faktiskt typer. Alltså,
+            gissar typen med hjälp av värdet. Så har vi en konstant som assignas
+            till siffran 1 så vet TypeScript att den variabeln är av typen
+            number.
+          </ListItem>
+          <ListItem>
+            TypeScript har också en escape hatch, och det är genom att typa
+            saker som any. Detta är dock inte rekommenderat och vi tappar grejen
+            med att använda TypeScript
+          </ListItem>
+          <ListItem>
+            Att man får ett extra byggsteg är sällan ett problem nu för tiden,
+            dom flesta använder redan babel och någon nyare version av
+            EcmaScript för att få tillgång till det senaste men behöver ändå
+            bakåtkompabiltet. Nu för tiden är det enkelt att integrera
+            TypeScript i sitt befintliga byggsteg
+          </ListItem>
+          <ListItem>
+            Att typer är verbose är svårt att komma ifrån, och tycker man så och
+            att vinningen att använda typer inte är tillräckligt stor så kanske
+            inte typer är för den personen helt enkelt
+          </ListItem>
+        </UnorderedList>
       </Notes>
     </Slide>
 
     <Slide>
       <Heading fontSize="h3">
-        Varför <i>inte</i> typer
+        Varför <i>inte</i> typer svar
       </Heading>
       <UnorderedList>
         <ListItem>
-          Problem med tredje-partskod. I värsta fall kan man skapa egna
-          TypeScript typer av paketet och typa upp det så gott man kan,
-          alternativt få det lika dåligt typat som om det vore JavaScript
+          <i>Problem/jobbigt med tredje-partskod</i>. I värsta fall kan man
+          skapa egna TypeScript typer för koden och typa upp det så gott man
+          kan, alternativt så får man det lika dåligt typat som om det vore
+          JavaScript
         </ListItem>
         <ListItem>
-          Falsk säkerhet med typer. Också svårt att komma ifrån.
+          <i>Falsk trygghet med typer</i>. Svårt att komma ifrån. Dock bör man
+          ju ändå skriva tester!
         </ListItem>
       </UnorderedList>
+
       <Notes>
-        I och med typer så blir det mindre tveksamheter för verktyg. Exempelvis
-        eslint, codegen och codemods.
+        <UnorderedList color="#fff">
+          <ListItem>
+            Att det kan bli problem med tredje-partskod kan hända, men i värsta
+            fall så kan man skapa egna TypeScript typer för tredje-partskoden.
+            Alternativt så kan man få det lika dåligt typat som om det vore
+            JavaScript.
+          </ListItem>
+          <ListItem>
+            Falsk trygghet är svårt att komma ifrån, men bara för att man har
+            typer så betyder inte det att man inte behöver några tester. Så typa
+            saker och skriv tester så blir ni ännu tryggare.
+          </ListItem>
+        </UnorderedList>
       </Notes>
     </Slide>
+
     <Slide>
       <Heading fontSize="h3">Dags för lite kod! 🎉</Heading>
       <Appear>
         <GruvboxCodePane>
           {`
+// user.ts
+
 // TypeScript infer it as: {id: number, username: string, email: string}
 const user = { id: 1, username: "jesper", email: "jesper@beanloop.se" }; 
         `}
         </GruvboxCodePane>
       </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Okej, nu är det dags för det ni har väntat på! Nu ska vi kolla på
+            lite kod!
+          </ListItem>
+          <ListItem>
+            Den här koden visar ett vanligt JavaScript-objekt. Vi ser ett id,
+            ett username och en email i objektet. Jag har också lagt en
+            kommentar ovan här för att se vad TypeScript inferar.
+          </ListItem>
+          <ListItem>
+            Det som TypeScript inferar är att id är av typen number, username av
+            typen sträng och likaså email
+          </ListItem>
+          <ListItem>
+            Nu har vi faktiskt skrivit vår första TypeScript-kod, i och med att
+            vi har filändelsen .ts. Som kännetecknar att det är en
+            TypeScript-fil. Är ni vana med JavaScript så har vi inte skrivit
+            någon annorlunda kod än JavaScript, men vi får redan en hel del
+            fördelar av TypeScript, bara genom att ha en TypeScript-fil.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
       <GruvboxCodePane>
         {`
+// user.ts
+
 type User = {
   id: number;
   username: string;
@@ -409,25 +568,250 @@ const user: User = { id: 1, username: "jesper", email: "jesper@beanloop.se" };
       <Appear>
         <Image src={firstNameError} width="100%" />
       </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Här har vi då samma kod som innan, men vi har introducerat en egen
+            typ som vi benämner till user.
+          </ListItem>
+          <ListItem>
+            Den här user-typen innehåller egentligen precis samma som det som
+            TypeScript inferade åt oss.
+          </ListItem>
+          <ListItem>
+            Vi sätter sedan att vår variabel ska vara va typen User med hjälp av
+            kolonet innan värdet assignas till variablen.
+          </ListItem>
+          <ListItem>
+            Vi har nu vår första egna typ deklarerad och som används
+          </ListItem>
+          <ListItem>
+            Det fina med att sätta vår variabel till vår typ så här är att vi
+            får fel från TypeScript om vi försöker lägga en property i objektet
+            som inte stämmer överens med typen. Som vi ser här så finns ju inte
+            firstName i typen och försöker vi lägga till det i objektet så får
+            vi ett fel. Detta blir en stor skillnad mot att TypeScript skulle
+            infera typen åt oss. Då skulle den infera det som typen fälten i
+            typen User, men plus firstName satt till en sträng. Vi skulle
+            dessutom få fel här av TypeScript om vi inte skulle exempelvis haft
+            med property id.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
       <GruvboxCodePane>
         {`
+// user-service.ts
+
 import type { User } from "./user";
 
-const getUser: User | null = () => // ...
+const getUser: User = () => // ...
 
 const editUser = (user: User) => // ...
         `}
       </GruvboxCodePane>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Här ser vi hur vi kan importera vår nyligen skapade typ och
+            återanvända den, och dessutom typa returvärdet för
+            getUser-funktionen till User.
+          </ListItem>
+          <ListItem>
+            Den andra funktionen editUser tar en user som parameter
+          </ListItem>
+          <ListItem>
+            Detta innebär då alltså att från getUser så får vi tillbaka ett
+            objekt som överensstämmer med typen user. Vi får inte fler
+            properties, och inte färre. Detsamma gäller för editUser, när man
+            anropar den funktionen så måste man skicka med ett objekt som
+            överensstämmer med vår user-typ.
+          </ListItem>
+          <ListItem>
+            Det blir tydligt att veta vad man ska skicka in, och vad man kan
+            förväntas få tillbaka
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Primitiva typer</Heading>
+
+      <Appear>
+        <GruvboxCodePane>
+          {`
+const num: number = 123;
+const floatNum: number = 123.456;
+
+const str: string = "Hello";
+
+const bool: boolean = true;
+const falseBool: boolean = false;
+          `}
+        </GruvboxCodePane>
+      </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Nu har vi sett lite TypeScript-kod, men jag tänkte jag skulle gå
+            igenom lite olika typerna som finns i TypeScripts typsystemet.
+          </ListItem>
+          <ListItem>Vi börjar med de primitiva typerna.</ListItem>
+          <ListItem>
+            Dom primitiva typerna är number, string och boolean och dom ser ut
+            som så här. Dessa primitiva typer finns i JavaScript också, men
+            inget som man skriver ut när man kodar JavaScript.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
+    </Slide>
+    <Slide>
+      <Heading fontSize="h3">Arrays</Heading>
+
+      <Appear>
+        <GruvboxCodePane>
+          {`
+const boolArray: boolean[] = [true, false];
+
+console.log(boolArray[0]); // true
+console.log(boolArray.length); // 2
+
+const numbers: Array<number> = [1, 2, 3, 4, 5];
+          `}
+        </GruvboxCodePane>
+      </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>Nästa sak är arrayer.</ListItem>
+          <ListItem>Inte olikt hur vi jobbar med arrayer i JavaScript</ListItem>
+          <ListItem>
+            Syntaxen för att säga att en variabel är av typen array är två
+            klamerparenteser, som ni kan se på rad 1. Vi har dvs en array med
+            bools här
+          </ListItem>
+          <ListItem>
+            Det finns också en alternativ syntax, som vissa kan tycka är
+            tydligare och det är att säga en Array av typen number, som ni ser
+            på rad 6.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Specialtyper</Heading>
+
+      <Appear>
+        <UnorderedList>
+          <ListItem>any</ListItem>
+          <ListItem>never</ListItem>
+          <ListItem>undefined</ListItem>
+          <ListItem>null</ListItem>
+          <ListItem>void</ListItem>
+        </UnorderedList>
+      </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>I TypeScript så finns det några specialtyper</ListItem>
+          <ListItem>Dom är any, never, undefined, null och void</ListItem>
+        </UnorderedList>
+      </Notes>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Any</Heading>
+
+      <Appear>
+        <GruvboxCodePane>
+          {`
+// income tar alla typer
+let income: any = "100";
+income = 100;
+income = false;
+
+
+// any är kompatibel med alla typer
+let price: number = 0.0;
+income = price;
+price = income;
+          `}
+        </GruvboxCodePane>
+      </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>Vi börjar kolla på any</ListItem>
+          <ListItem>
+            any har en speciell plats i TypeScript-typsystem. Den ger oss en
+            escape hatch från typsystemet. Med den så säger vi till TypeScript
+            att vi vet bättre än TypeScript och gör så att TypeScript backar
+            undan. any är kompatibel med alla typer i typsystemet. Det betyder
+            att vad som helst kan tilldelas till en variabel av typen any
+          </ListItem>
+          <ListItem>
+            I koden här ser vi variablen income som har typen any, vi kan
+            assigna precis vad som helst till den. Any är dessutom kompatibel
+            med alla typer, så vi uppfyller variablen price's typ number i och
+            med att vi är any.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Any</Heading>
+
+      <Appear>
+        <GruvboxCodePane>
+          {`
+// income tar alla typer
+let income: any = "100";
+income = 100;
+income = false;
+
+
+// any är kompatibel med alla typer
+let price: number = 0.0;
+income = price;
+price = income;
+          `}
+        </GruvboxCodePane>
+      </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>Vi börjar kolla på any</ListItem>
+          <ListItem>
+            any har en speciell plats i TypeScript-typsystem. Den ger oss en
+            escape hatch från typsystemet. Med den så säger vi till TypeScript
+            att vi vet bättre än TypeScript och gör så att TypeScript backar
+            undan. any är kompatibel med alla typer i typsystemet. Det betyder
+            att vad som helst kan tilldelas till en variabel av typen any
+          </ListItem>
+          <ListItem>
+            I koden här ser vi variablen income som har typen any, vi kan
+            assigna precis vad som helst till den. Any är dessutom kompatibel
+            med alla typer, så vi uppfyller variablen price's typ number i och
+            med att vi är any.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
+      </Slide>
 
     <Slide>
       <Heading fontSize="h3">Generics</Heading>
 
-      <GruvboxCodePane>
-        {`
+      <Appear>
+        <GruvboxCodePane>
+          {`
 function reverse<T>(items: Array<T>) {
   return items.map((_item, index) => items[items.length - 1 - index]);
 }
@@ -436,7 +820,14 @@ reverse([1, 2, 3, 4, 5]);
 
 reverse(["A", "B", "C", "D", "E"]);
         `}
-      </GruvboxCodePane>
+        </GruvboxCodePane>
+      </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>Över till generics</ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
@@ -942,6 +1333,52 @@ const age: any = "seventeen";
       </UnorderedList>
     </Slide>
     <Slide>
+      <Heading fontSize="h3">Tips och tricks</Heading>
+      <GruvboxCodePane>
+        {`
+  enum Direction {
+    Up = "Upp",
+    Down = "Ner",
+    Left = "Vänster",
+    Right = "Höger",
+  }
+
+  Object.values(Direction); // [ 'Upp', 'Ner', 'Vänster', 'Höger' ]
+
+    `}
+      </GruvboxCodePane>
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Dock inte möjligt att göra med const enums då dom försvinner efter
+            koden blivit JavaScript-kod.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
+    </Slide>
+    <Slide>
+      <Heading fontSize="h3">Bra länkar</Heading>
+      <UnorderedList>
+        <ListItem>
+          <Link href="https://github.com/Microsoft/TypeScript">
+            https://github.com/Microsoft/TypeScript
+          </Link>
+        </ListItem>
+
+        <ListItem>
+          <Link href="https://www.typescriptlang.org/docs/handbook/intro.html">
+            https://www.typescriptlang.org/docs/handbook/intro.html
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href="https://www.typescriptlang.org/docs/handbook/utility-types.html">
+            https://www.typescriptlang.org/docs/handbook/utility-types.html
+          </Link>
+        </ListItem>
+      </UnorderedList>
+    </Slide>
+
+    <Slide>
       <FlexBox height="100%" flexDirection="column">
         <Heading margin="0px" fontSize="h1">
           Tack för mig
@@ -951,30 +1388,6 @@ const age: any = "seventeen";
         </Heading>
       </FlexBox>
     </Slide>
-    {/*<Slide>*/}
-    {/*<Heading fontSize="h3">Tips och tricks</Heading>*/}
-    {/*<GruvboxCodePane>*/}
-    {/*{`*/}
-    {/*enum Direction {*/}
-    {/*Up = "Upp",*/}
-    {/*Down = "Ner",*/}
-    {/*Left = "Vänster",*/}
-    {/*Right = "Höger",*/}
-    {/*}*/}
-
-    {/*Object.values(Direction); // [ 'Upp', 'Ner', 'Vänster', 'Höger' ]*/}
-
-    {/*`}*/}
-    {/*</GruvboxCodePane>*/}
-    {/*<Notes>*/}
-    {/*<UnorderedList color="#fff">*/}
-    {/*<ListItem>*/}
-    {/*Dock inte möjligt att göra med const enums då dom försvinner efter*/}
-    {/*koden blivit JavaScript-kod.*/}
-    {/*</ListItem>*/}
-    {/*</UnorderedList>*/}
-    {/*</Notes>*/}
-    {/*</Slide>*/}
   </Deck>
 );
 
