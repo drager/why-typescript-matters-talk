@@ -809,6 +809,55 @@ function infiniteLoop(): never {
     </Slide>
 
     <Slide>
+      <Heading fontSize="h3">null och undefined</Heading>
+
+      <Appear>
+        <GruvboxCodePane>
+          {`
+const nullableVar: null = null;
+const undefinedVar: undefined = undefined;
+          `}
+        </GruvboxCodePane>
+      </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Null och undefined har vi ju i JavaScript, och dom finns också som
+            typer i TypeScript.
+          </ListItem>
+          <ListItem>
+            Vi typar det precis som vi använder värderna i JavaScript. Kolon
+            null och kolon undefiend.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">void</Heading>
+
+      <Appear>
+        <GruvboxCodePane>
+          {`
+function log(message): void {
+  console.log(message);
+}
+          `}
+        </GruvboxCodePane>
+      </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            void representerar returvärdet för funktioner som inte returnerar något värde. Det är inferas varje gång en funktion inte har något returvärde 
+          </ListItem>
+          <ListItem>Funktionen console.log är void då den inte returnerar något, och då blir vår funktion också det.</ListItem>
+        </UnorderedList>
+      </Notes>
+    </Slide>
+
+    <Slide>
       <Heading fontSize="h3">Generics</Heading>
 
       <Appear>
