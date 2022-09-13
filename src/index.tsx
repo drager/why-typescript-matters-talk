@@ -222,7 +222,9 @@ const Presentation = () => (
       </Notes>
     </Slide>
     <Slide>
+      <Heading fontSize="h3">Vad innebär ett starkt typat språk?</Heading>
       <GruvboxCodePane language="jsx">{`
+// compat.js
 function compat(arr) {
   if (orr.length > 10) return arr.trim(0, 10);
   return arr;
@@ -236,6 +238,7 @@ function compat(arr) {
       <Box padding="1em" />
       <Appear>
         <GruvboxCodePane language="tsx">{`
+// compat.ts
 function compat(arr: Array<string>) {
   if (arr.length > 10) return arr.slice(0, 10);
   return arr;
@@ -432,18 +435,24 @@ function compat(arr: Array<string>) {
         Varför <i>inte</i> typer svar
       </Heading>
       <UnorderedList>
-        <ListItem>
-          <i>Jobbigt att typa allt</i>: TypeScript inferar faktiskt typer, det
-          finns också en escape hatch och det är att typa saker som <i>any</i>.
-          Dock ej bra!
-        </ListItem>
-        <ListItem>
-          <i>Extra byggsteg</i>: Antagligen så använder man redan babel och
-          någon nyare version av EcmaScript och kräver bakåtkompabiltet
-        </ListItem>
-        <ListItem>
-          <i>Verbose</i>: Att typer är verbose är svårt att komma ifrån
-        </ListItem>
+        <Appear>
+          <ListItem>
+            <i>Jobbigt att typa allt</i>: TypeScript inferar faktiskt typer, det
+            finns också en escape hatch och det är att typa saker som <i>any</i>
+            . Dock ej bra!
+          </ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>
+            <i>Extra byggsteg</i>: Antagligen så använder man redan babel och
+            någon nyare version av EcmaScript och kräver bakåtkompabiltet
+          </ListItem>
+        </Appear>
+        <Appear>
+          <ListItem>
+            <i>Verbose</i>: Att typer är verbose är svårt att komma ifrån
+          </ListItem>
+        </Appear>
       </UnorderedList>
 
       <Notes>
@@ -481,16 +490,20 @@ function compat(arr: Array<string>) {
         Varför <i>inte</i> typer svar
       </Heading>
       <UnorderedList>
+          <Appear>
         <ListItem>
           <i>Problem/jobbigt med tredje-partskod</i>. I värsta fall kan man
           skapa egna TypeScript typer för koden och typa upp det så gott man
           kan, alternativt så får man det lika dåligt typat som om det vore
           JavaScript
         </ListItem>
+</Appear>
+        <Appear>
         <ListItem>
           <i>Falsk trygghet med typer</i>. Svårt att komma ifrån. Dock bör man
           ju ändå skriva tester!
         </ListItem>
+</Appear>
       </UnorderedList>
 
       <Notes>
@@ -850,9 +863,14 @@ function log(message): void {
       <Notes>
         <UnorderedList color="#fff">
           <ListItem>
-            void representerar returvärdet för funktioner som inte returnerar något värde. Det är inferas varje gång en funktion inte har något returvärde 
+            void representerar returvärdet för funktioner som inte returnerar
+            något värde. Det är inferas varje gång en funktion inte har något
+            returvärde
           </ListItem>
-          <ListItem>Funktionen console.log är void då den inte returnerar något, och då blir vår funktion också det.</ListItem>
+          <ListItem>
+            Funktionen console.log är void då den inte returnerar något, och då
+            blir vår funktion också det.
+          </ListItem>
         </UnorderedList>
       </Notes>
     </Slide>
