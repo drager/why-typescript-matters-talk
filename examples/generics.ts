@@ -1,11 +1,20 @@
-const reverse = <T>(items: Array<T>) =>
-  items.map((_item, index) => items[items.length - 1 - index]);
+function reverse<T>(items: Array<T>): Array<T> {
+  return items.map((_item, index) => items[items.length - 1 - index]);
+}
 
-type MySpecialArray<T> = {
-  reverse(...items: Array<T[] | T>): T[];
-};
+reverse<number>([1, 2, 3, 4, 5]);
 
-const myArray: MySpecialArray<string> = { reverse };
+reverse<string>(["A", "B", "C", "D", "E"]);
 
 
-myArray.reverse([1,2,3,4,5])
+function reverseStrings(items: Array<string>) {
+  return items.map((_item, index) => items[items.length - 1 - index]);
+}
+
+reverseStrings(["A", "B"]);
+
+function reverseNumbers(items: Array<number>) {
+  return items.map((_item, index) => items[items.length - 1 - index]);
+}
+
+reverseNumbers([1, 2]);

@@ -748,9 +748,9 @@ price = income;
 
       <Notes>
         <UnorderedList color="#fff">
-          <ListItem>Vi börjar kolla på any</ListItem>
+          <ListItem>Vi börjar med att kolla på any</ListItem>
           <ListItem>
-            any har en speciell plats i TypeScript-typsystem. Den ger oss en
+            any har en speciell plats i TypeScript typsystem. Den ger oss en
             escape hatch från typsystemet. Med den så säger vi till TypeScript
             att vi vet bättre än TypeScript och gör så att TypeScript backar
             undan. any är kompatibel med alla typer i typsystemet. Det betyder
@@ -767,34 +767,36 @@ price = income;
     </Slide>
 
     <Slide>
-      <Heading fontSize="h3">Any</Heading>
+      <Heading fontSize="h3">Never</Heading>
 
       <Appear>
         <GruvboxCodePane>
           {`
-// income tar alla typer
-let income: any = "100";
-income = 100;
-income = false;
+function error(message: string): never {
+  throw new Error(message);
+}
 
+// Inferred return type is never
+function fail() {
+  return error("Something failed");
+}
 
-// any är kompatibel med alla typer
-let price: number = 0.0;
-income = price;
-price = income;
+function infiniteLoop(): never {
+  while (true) {}
+}
           `}
         </GruvboxCodePane>
       </Appear>
 
       <Notes>
         <UnorderedList color="#fff">
-          <ListItem>Vi börjar kolla på any</ListItem>
           <ListItem>
-            any har en speciell plats i TypeScript-typsystem. Den ger oss en
-            escape hatch från typsystemet. Med den så säger vi till TypeScript
-            att vi vet bättre än TypeScript och gör så att TypeScript backar
-            undan. any är kompatibel med alla typer i typsystemet. Det betyder
-            att vad som helst kan tilldelas till en variabel av typen any
+            never representerar typen av värden som aldrig händer.
+          </ListItem>
+          <ListItem>
+            Till exempel är never returtypen för en funktion som alltid kastar
+            ett fel, eller en funktion som är en oändlig loop som vi kan se i
+            koden här.
           </ListItem>
           <ListItem>
             I koden här ser vi variablen income som har typen any, vi kan
@@ -804,7 +806,7 @@ price = income;
           </ListItem>
         </UnorderedList>
       </Notes>
-      </Slide>
+    </Slide>
 
     <Slide>
       <Heading fontSize="h3">Generics</Heading>
@@ -812,20 +814,67 @@ price = income;
       <Appear>
         <GruvboxCodePane>
           {`
-function reverse<T>(items: Array<T>) {
+function reverseStrings(items: Array<string>) {
   return items.map((_item, index) => items[items.length - 1 - index]);
 }
 
-reverse([1, 2, 3, 4, 5]);
+reverseStrings(["A", "B"]);
 
-reverse(["A", "B", "C", "D", "E"]);
-        `}
+function reverseNumbers(items: Array<number>) {
+  return items.map((_item, index) => items[items.length - 1 - index]);
+}
+
+reverseNumbers([1, 2]);
+          `}
         </GruvboxCodePane>
       </Appear>
-
       <Notes>
         <UnorderedList color="#fff">
           <ListItem>Över till generics</ListItem>
+          <ListItem>
+            Vi har generics i TypeScript, likt generics som finns i andra språk
+            som C# och Java.
+          </ListItem>
+          <ListItem>
+            Utan generics blir det svårt att ha återanvändbar kod. Att skriva
+            kod som det här exempelet är otroligt ohållbart.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
+    </Slide>
+
+    <Slide>
+      <Heading fontSize="h3">Generics</Heading>
+
+      <GruvboxCodePane>
+        {`
+function reverse<T>(items: Array<T>): Array<T> {
+  return items.map((_item, index) => items[items.length - 1 - index]);
+}
+
+reverse<number>([1, 2, 3, 4, 5]);
+
+reverse<string>(["A", "B", "C", "D", "E"]);
+        `}
+      </GruvboxCodePane>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Istället skriver vi en generisk funktion som vi kallar för reverse
+            och som har en typ-parameter som vi benämner T.
+          </ListItem>
+          <ListItem>
+            Med denna typ-parameter kan vi fånga upp den typ som användaren
+            anger. Till exempel number eller string. Vi sätter också att
+            returtypen är en Array av T, dvs en array av det som användaren
+            anger.
+          </ListItem>
+          <ListItem>
+            Vi behöver egentligen inte annotera anropen till reverse som i
+            exempelet här, typen inferas av TypeScript beroende på vad din array
+            innehåller.
+          </ListItem>
         </UnorderedList>
       </Notes>
     </Slide>
@@ -848,8 +897,68 @@ type GuestUser = {
 const getUsername = (user: User | GuestUser): string => user.username;
         `}
       </GruvboxCodePane>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Unions är kort sagt ett sätt att kombinera olika typer på. En union
+            är en typ som bildas av två eller flera andra typer och
+            representerar värden som kan vara vilken som helst av dessa typer.
+          </ListItem>
+          <ListItem>
+            Man kan tänka att det är en eller-sats. Dvs att det är antingen det,
+            eller det andra.
+          </ListItem>
+          <ListItem>
+            Kollar vi på funktionen getUsername här så accepterar den funktionen
+            antingen en user av typen User eller en user av typen GuestUser.
+            Båda av dom typerna innehåller en username property och vi kan på så
+            vis alltid plocka ut username från vår user-parameter.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
+    <Slide>
+      <Heading fontSize="h3">Unions</Heading>
+
+      <GruvboxCodePane>
+        {`
+const welcomePeople = (people: Array<string> | string) => {
+  if (Array.isArray(people)) {
+    // Here: 'people' is 'Array<string>
+    console.log("Hello, " + people.join(" and "));
+  } else {
+    // Here: 'people' is 'string'
+    console.log("Welcome lone traveler " + people);
+  }
+}
+        `}
+      </GruvboxCodePane>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            En sak man kanske vill göra är att ta emot en array av någonting,
+            eller bara ett värde. Vi kan då säga en Array av strängar eller en
+            sträng.
+          </ListItem>
+          <ListItem>
+            Sen får vi guarda med hjälp av if-satser för att agera olika
+            beroende på vad värdet är för något. Men så fort vi har guardat och
+            sagt att people är faktiskt en array, jo då fattar TypeScript att
+            people kan bara vara en array och inget annat. Och vi kan då jobba
+            med värdet med hjälp av olika funktioner som finns på arrayer.
+          </ListItem>
+          <ListItem>
+            Detsamma gäller för else-blocket. Där i vet TypeScript att people nu
+            är en sträng och vi kan jobba med värdet och applicera olika
+            sträng-funktioner på det. Båda av dom typerna innehåller en username
+            property.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
+    </Slide>
     <Slide>
       <Heading fontSize="h3">Intersection</Heading>
 
@@ -862,9 +971,9 @@ type ErrorHandling = {
   error?: { message: string };
 };
 
-type UserReponse = User & ErrorHandling;
+type UserResponse = User & ErrorHandling;
 
-const handleUserResponse = (userResponse: UserReponse): User | null => {
+const handleUserResponse = (userResponse: UserResponse): User | null => {
   if (userResponse.error) {
     // Report error to log service
     return null;
@@ -874,6 +983,34 @@ const handleUserResponse = (userResponse: UserReponse): User | null => {
 };
         `}
       </GruvboxCodePane>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Intersections är på liknande tema som unions, men de används mycket
+            olika. Intersections kombinerar flera typer till en. På så sätt kan
+            du lägga ihop befintliga typer för att skapa en ny typ som
+            innehåller exempelvis alla properties som två eller flera typer har.
+          </ListItem>
+          <ListItem>
+            Med unions så kunde man ju tänka att det var en eller-sats. Med
+            intersections så kan man tänka att det är en och-sats. Dvs, denna
+            typen och den andra typen.
+          </ListItem>
+          <ListItem>
+            Vi har här två typer, user-typen som vi har definerat sedan innan
+            som importeras här på rad 1, och en ny typ som vi kallar för
+            ErrorHandling på rad 3. Vår intersection typ ser vi på rad 8, som vi
+            benämnt till UserResponse. Den här typen är alltså av typen User och
+            typen ErrorHandling.
+          </ListItem>
+          <ListItem>
+            Koden försöker visa ett vanligt exempel, vi någon funktion som
+            hämtat data från exempelvis ett API och så ska vi hantera responset.
+            Målet är ju att returnera ett objekt av typen user.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
@@ -883,24 +1020,53 @@ const handleUserResponse = (userResponse: UserReponse): User | null => {
         {`
 import type { User } from "./user";
 
-const getIdWithName = (user: User): [number, string] => {
-  return [user.id, user.username];
+const getBalanceWithUsername = (user: User): [string, number] => {
+  const accountBalance: number = getAccountBalance(user);
+
+  return [user.username, accountBalance];
 };
 
-const [id, username] = getIdWithName({
+const [username, accountBalance] = getBalanceWithUsername({
   id: 1,
   username: "johndoe",
   email: "johndoe@doe.doe",
 });
         `}
       </GruvboxCodePane>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Tupels kan man säga är en special-typ av Array-typen. Själva
+            datastrukturen tupel som exempelvis finns, och är mycket populär i
+            språket Python finns inte i JavaScript, men vi kan typa saker som om
+            det vore en tupel.
+          </ListItem>
+          <ListItem>
+            Så, en tupel är en array-typ som vet exakt hur många element den
+            innehåller och exakt vilka typer den innehåller på specifika
+            positioner.
+          </ListItem>
+          <ListItem>
+            Kollar vi på det här exempelet så ser vi att funktionen
+            getIdWithName returnerar en tuple. En array som innehåller två
+            element, det första av typen string, och det andra av typen number.
+          </ListItem>
+          <ListItem>
+            Vi kan som vi ser på rad 9 plocka ut username ur första position ur
+            tupeln, och accountBalance ur den andra. Vi får rätt typer här.
+            username är av typen string, och accountBalance är av typen number
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
       <Heading fontSize="h3">Tuples</Heading>
 
-      <GruvboxCodePane>
-        {`
+      <Appear>
+        <GruvboxCodePane>
+          {`
 import { useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 
@@ -915,14 +1081,40 @@ const MyButton = () => {
   return <button onClick={handleClick}>Clicked {count} times</button>;
 };
         `}
-      </GruvboxCodePane>
+        </GruvboxCodePane>
+      </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Eftersom det förra exempelet kanske var en aning trivialt så har jag
+            valt att visa ett till exempel på tuples som ni kanske känner igen
+          </ListItem>
+          <ListItem>I allafall om ni har kodat React.</ListItem>
+          <ListItem>
+            Det som returneras från Reacts funktion useState är just en tupel.
+            Jag har lagt till typerna här för att göra det tydligt vad man får
+            tillbaka från useState.
+          </ListItem>
+          <ListItem>
+            Vi får i alla fall tillbaka en tupel, där första positions värde är
+            av typen number och det andra värdet är av typen Dispatch, som tar
+            en generisk typ-parameter som vi sätter till SetStateAction som
+            också tar en generisk typ-parameter som vi sätter till number. Vi
+            behöver inte gå in djupare på hur dom typerna defineras, men
+            förenklat kan vi säga att det är en funktion som tar ett värde av en
+            siffra.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
       <Heading fontSize="h3">Enums</Heading>
 
-      <GruvboxCodePane>
-        {`
+      <Appear>
+        <GruvboxCodePane>
+          {`
 enum Color {
   Red // 0,
   Green // 1,
@@ -940,7 +1132,26 @@ const getColor = (color: Color): string => {
   }
 };
         `}
-      </GruvboxCodePane>
+        </GruvboxCodePane>
+      </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Över till enums. Enums är inget som finns i JavaScript och är en av
+            få funktioner som är ett extra-tillägg i TypeScript som inte handlar
+            om typer.
+          </ListItem>
+          <ListItem>
+            Kommer man från andra språk till JavaScript, så brukar det vara
+            något man saknar
+          </ListItem>
+          <ListItem>
+            Enums kan användas för att gruppera ihop en samling av relaterade
+            värden. Enums låter oss definera en samling av namngivna konstanter.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
@@ -991,6 +1202,14 @@ point.x = 20;
 point.y = 40;
         `}
       </GruvboxCodePane>
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Array och objekt kan muteras och skrivas över hur som helst by
+            default
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
@@ -1025,6 +1244,16 @@ readonlyItems[0] = 100;
           </Appear>
         </FlexBox>
       </FlexBox>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Men typar vi något som readonly så försvinner till och med förslagen
+            med push och andra muterande funktioner. Vi kan inte pusha till
+            arrayen, och inte heller skriva över värden direkt.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
@@ -1054,6 +1283,19 @@ readonlyPoint.y = 40;
           <Image src={readonlyError4} width="100%" />
         </FlexBox>
       </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Detsamma gäller för vår nydefinerade typ ReadonlyPoint. Vi säger att
+            våra properties ska vara readonly av typen number.
+          </ListItem>
+          <ListItem>
+            Vi får då liknande fel som på array och vi kan med andra ord inte
+            skriva över readonly properties hur vi vill
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
     <Slide>
       <Heading fontSize="h3">
@@ -1133,6 +1375,16 @@ export const getUser = ({ userId }) => users.find((user) => user.id === userId) 
         `}
         </GruvboxCodePane>
       </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>Här har vi lite kod skriven i TypeScript</ListItem>
+          <ListItem>
+            och här ser vi den transpilerade JavaScript-koden. Ser ganska så lik
+            ut, eller vad tycker ni?
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
@@ -1191,6 +1443,30 @@ const getColor = (color) => {
           </GruvboxCodePane>
         </Appear>
       </FlexBox>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Men enums finns ju inte i JavaScript? Och jag har ju dessutom stått
+            och sagt att enums är ett av få tillägg utöver typer som TypeScript
+            har gentemot JavaScript.
+          </ListItem>
+          <ListItem>
+            Och ja, det stämmer bra. Enums finns inte i JavaScript. Här till
+            vänster ser vi lite enums i TypeScript.
+          </ListItem>
+          <ListItem>
+            Och till höger har vi den outputen. Dvs JavaScript-koden. Nu var ju
+            TypeScript-koden och JavaScript-koden inte längre så lika varandra.
+            Och nej, det stämmer. Men det är ju för att enums inte finns som
+            koncept i JavaScript.
+          </ListItem>
+          <ListItem>
+            Och tycker man att detta är ett problem, och att man får för mycket
+            kod outputtad.
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
     <Slide>
       <Heading fontSize="h3">const enums till räddningen</Heading>
@@ -1240,6 +1516,25 @@ const getColor = (color) => {
         `}
           </GruvboxCodePane>
         </Appear>
+
+        <Notes>
+          <UnorderedList color="#fff">
+            <ListItem>const enums till räddningen!</ListItem>
+            <ListItem>
+              TypeScript-koden till vänster blir JavaScript-koden till höger.
+              Allt som hade med enums att göra har försvunnit och ersatts direkt
+              inline i koden istället.
+            </ListItem>
+            <ListItem>
+              Det man missar med att använda const enums är att faktiskt kunna
+              jobba med enumen som ett värde. När vi kör icke const enums så kan
+              vi faktiskt använda oss av Object.values, Object.entries etc i och
+              med att enums blir ett objekt när det blir JavaScript. Det
+              försvinner dessvärre när vi använder oss av const enums. Men som
+              mycket annat, så får man väga för och nackdelar mot varandra.
+            </ListItem>
+          </UnorderedList>
+        </Notes>
       </FlexBox>
     </Slide>
 
@@ -1264,10 +1559,9 @@ const getColor = (color) => {
       <Appear>
         <GruvboxCodePane language="json">
           {`
+// tsconfig.json
 {
-  ...
   "compilerOptions": {
-    ...
     "noImplicitAny": true
   }
 }
@@ -1278,6 +1572,7 @@ const getColor = (color) => {
       <Appear>
         <GruvboxCodePane language="js">
           {`
+//.eslintrc.js
 module.exports = {
   plugins: ["@typescript-eslint"],
   extends: [...],
@@ -1288,6 +1583,23 @@ module.exports = {
           `}
         </GruvboxCodePane>
       </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Ja, man kan typa allt som any, men vi kan faktiskt enforca regler
+            som gör att det inte går, vilket kan vara en rekommendation att ta
+            med sig till sitt team.
+          </ListItem>
+          <ListItem>
+            Det första är att sätta noImplicitAny till true i sin tsconfig.json
+          </ListItem>
+          <ListItem>
+            Och det andra är att lägga till en typescript-eslint regel som heter
+            no-explicit-any till error
+          </ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
@@ -1311,6 +1623,16 @@ const age: any = "seventeen";
       <Appear>
         <Image src={noAnyError2} width="1000px" />
       </Appear>
+
+      <Notes>
+        <UnorderedList color="#fff">
+          <ListItem>
+            Med dessa regler och kod som i det här exempelet så får vi errors.
+          </ListItem>
+          <ListItem>På rad 1 av vår tsconfig</ListItem>
+          <ListItem>Och på rad 3 av vår eslint regel</ListItem>
+        </UnorderedList>
+      </Notes>
     </Slide>
 
     <Slide>
@@ -1331,30 +1653,6 @@ const age: any = "seventeen";
           Kan nyttja både OCaml-paket och JavaScript-paket
         </ListItem>
       </UnorderedList>
-    </Slide>
-    <Slide>
-      <Heading fontSize="h3">Tips och tricks</Heading>
-      <GruvboxCodePane>
-        {`
-  enum Direction {
-    Up = "Upp",
-    Down = "Ner",
-    Left = "Vänster",
-    Right = "Höger",
-  }
-
-  Object.values(Direction); // [ 'Upp', 'Ner', 'Vänster', 'Höger' ]
-
-    `}
-      </GruvboxCodePane>
-      <Notes>
-        <UnorderedList color="#fff">
-          <ListItem>
-            Dock inte möjligt att göra med const enums då dom försvinner efter
-            koden blivit JavaScript-kod.
-          </ListItem>
-        </UnorderedList>
-      </Notes>
     </Slide>
     <Slide>
       <Heading fontSize="h3">Bra länkar</Heading>
